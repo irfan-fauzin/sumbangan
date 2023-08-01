@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider          = "postgresql"
+  url               = env("POSTGRES_PRISMA_URL")
+  directUrl         = env("POSTGRES_URL_NON_POOLING")
+  shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+model User {
+  id               Int        @id @default(autoincrement())
+  username         String?    @unique
+  password         String?
+  fullname         String?
+  role             Role       @default(CAMPAIGN_MANAGER)
+  createdAt        DateTime   @default(now()) @map("created_at")
+  verified         Boolean    @default(false)
+  created_campaign Campaign[] @relation("CampaignToUser")
+}
+
+model Campaign {
+  id           Int      @id @default(autoincrement())
+  Title        String?  @unique
+  Image        String?
+  Description  String?
+  Target       Int
+  Status       Boolean  @default(true)
+  Date_created DateTime @default(now())
+  Date_end     String?
+  donate       Donate?
+  created_by   User[]   @relation("CampaignToUser")
+}
+
+model Donate {
+  id_donate Int      @id
+  Amount    Int?
+  Mesage    String?
+  Name      String?
+  donate    Campaign @relation(fields: [id_donate], references: [id])
+}
+
+enum Role {
+  ADMIN
+  CAMPAIGN_MANAGER
+}

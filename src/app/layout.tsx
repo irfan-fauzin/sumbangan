@@ -1,5 +1,7 @@
+'use client';
+
 import { Suspense } from 'react';
-import { Fira_Code } from 'next/font/google';
+import { Fira_Code } from '@next/font/google';
 import cn from 'classnames';
 import { QueryClientProvider } from '@/app/shared/query-client-provider';
 import { ThemeProvider } from '@/app/shared/theme-provider';
@@ -15,6 +17,7 @@ import 'swiper/css/pagination';
 import '@/assets/css/scrollbar.css';
 import '@/assets/css/globals.css';
 import '@/assets/css/range-slider.css';
+import { SessionProvider } from 'next-auth/react';
 
 const fira_code = Fira_Code({
   weight: ['400', '500', '600', '700'],
@@ -24,7 +27,7 @@ const fira_code = Fira_Code({
 
 export const metadata = {
   title: 'Sumbangan Bebasis Blockchain',
-  description: 'Criptic - React Next Web3 NFT Crypto Dashboard Template',
+  description: '-',
 };
 
 export default function RootLayout({
@@ -43,8 +46,8 @@ export default function RootLayout({
       </head>
       <body>
         <QueryClientProvider>
-          <ThemeProvider>
-            <WagmiConfig>
+          <SessionProvider>
+            <ThemeProvider>
               <SettingsButton />
               <SettingsDrawer />
               <Suspense fallback={null}>
@@ -52,8 +55,8 @@ export default function RootLayout({
                 <DrawersContainer />
               </Suspense>
               {children}
-            </WagmiConfig>
-          </ThemeProvider>
+            </ThemeProvider>
+          </SessionProvider>
         </QueryClientProvider>
       </body>
     </html>

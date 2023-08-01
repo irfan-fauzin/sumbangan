@@ -22,6 +22,7 @@ const ProfileInfo = dynamic(
 const PreviewContent = dynamic(
   () => import('@/components/create-nft/nft-preview-content')
 );
+const LOGIN = dynamic(() => import('@/components/ui/login-modal'));
 
 function renderModalContent(view: MODAL_VIEW | string) {
   switch (view) {
@@ -39,6 +40,8 @@ function renderModalContent(view: MODAL_VIEW | string) {
       return <Followers />;
     case 'NFT_PREVIEW':
       return <PreviewContent />;
+    case 'LOGIN':
+      return <LOGIN />;
     default:
       return null;
   }

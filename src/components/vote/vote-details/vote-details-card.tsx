@@ -19,27 +19,178 @@ import Image from 'next/image';
 
 import darkLogo from '@/assets/images/sedekah-subuh.png';
 
+const Xendit = require('xendit-node');
+const x = new Xendit({
+  secretKey:
+    'xnd_development_p2j1cllVZtJ7XYWPpFFO1jwDBvzexorKIttGsLsVPQTXhTADossE5peKlFZxiSm',
+});
 
-
-
-
+const { Invoice } = x;
+const i = new Invoice({});
 
 function VoteActionButton() {
-
   const [amount, setAmount] = useState(0);
 
-  
-  function checkValue(event:any) {
-    setAmount(handleDecimalsOnValue(event.target.value));
+  function checkValue(event: any) {
+    setAmount(handleDecimalsOnValue(event.currentTarget.value));
   }
-  function handleDecimalsOnValue(value:any) {
-    
-    return value.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".")
-}
+  function handleDecimalsOnValue(value: any) {
+    return value.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  }
 
+  async function handleSubmit(event: any) {
+    // Stop the form from submitting and refreshing the page.
+    event.preventDefault();
+
+    // Get data from the form.
+    const data = {
+      transaction_details: {
+        order_id: 'concert-ticket-053',
+        gross_amount: 190000,
+      },
+      credit_card: {
+        secure: true,
+      },
+      usage_limit: 5,
+      expiry: {
+        duration: 30,
+        unit: 'days',
+      },
+      item_details: [
+        {
+          id: 'tix-001',
+          name: 'Exclusive Tour Concert Day 1',
+          price: 95000,
+          quantity: 2,
+        },
+      ],
+      customer_details: {
+        first_name: 'John',
+        last_name: 'Doe',
+        email: 'john.doe@example.com',
+        phone: '+62181000000000',
+        notes:
+          'Thank you for your order. Please follow the instructions to complete payment.',
+      },
+    };
+    // Send the data to the server in JSON format.
+    const JSONdata = JSON.stringify(data);
+
+    // API endpoint where we send form data.
+    const endpoint = 'https://app.sandbox.midtrans.com/snap/v1/payment-links';
+
+    // Form the request for sending data to the server.
+    const options = {
+      // The method is POST because we are sending data.
+      method: 'POST',
+      // Tell the server we're sending JSON.
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+        Authorization:
+          'Basic U0ItTWlkLXNlcnZlci1PZXdYNjRCdzJrRndMRU05aGV3S3JIRVU6',
+      },
+      // Body of the request is the JSON data we created above.
+      body: JSONdata,
+    };
+
+    // Send the form data to our forms API on Vercel and get a response.
+    const response = await fetch(endpoint, options);
+
+    // Get the response data from server as JSON.
+    // If server returns the name submitted, that means the form works.
+    const result = await response.json();
+    console.log(result);
+  }
 
   return (
     <div className="mt-4 flex items-center xs:mt-6 xs:inline-flex md:mt-10">
+      <form onSubmit={handleSubmit} className="w-full max-w-lg">
+        <div className="-mx-3 mb-6 flex flex-wrap">
+          <div className="w-full px-3 md:mb-0 md:w-1/2">
+            <label
+              className="mb-2 block text-xs font-bold uppercase tracking-wide text-gray-700"
+              htmlFor="grid-first-name"
+            >
+              Nama
+            </label>
+            <input
+              className="mb-3 block w-full  appearance-none rounded border px-4 py-3 leading-tight text-gray-700 focus:bg-white focus:outline-none"
+              id="nama"
+              name="nama"
+              type="text"
+              placeholder="Opsional"
+            />
+          </div>
+          <div className="w-full px-3 md:w-1/2">
+            <label
+              className="mb-2 block text-xs font-bold uppercase tracking-wide text-gray-700"
+              htmlFor="grid-last-email"
+            >
+              Email
+            </label>
+            <input
+              className="mb-3 block w-full  appearance-none rounded border px-4 py-3 leading-tight text-gray-700 focus:bg-white focus:outline-none"
+              id="email"
+              name="email"
+              type="email"
+              placeholder="Opsional"
+            />
+          </div>
+        </div>
+        <div className="-mx-3 mb-6 flex flex-wrap">
+          <div className="w-full px-3">
+            <label
+              className="mb-2 block text-xs font-bold uppercase tracking-wide text-gray-700"
+              htmlFor="grid-password"
+            >
+              Pesan
+            </label>
+            <input
+              className="mb-3 block w-full appearance-none rounded border border-gray-200 bg-gray-200 px-4 py-3 leading-tight text-gray-700 focus:border-gray-500 focus:bg-white focus:outline-none"
+              id="pesan"
+              name="pesan"
+              type="text"
+              placeholder="Opsional"
+            />
+          </div>
+        </div>
+        <div className="-mx-3 mb-6 flex flex-wrap ">
+          <div className="w-full px-3">
+            <label
+              className="mb-2 block text-xs font-bold uppercase tracking-wide text-gray-700"
+              htmlFor="grid-password"
+            >
+              Jumlah Donasi
+            </label>
+            <div className="mb-6 flex items-center text-lg md:mb-8">
+              <div className="absolute p-3 text-lg tracking-tighter text-gray-900 outline-none transition-all placeholder:text-gray-600 focus:border-gray-900  dark:border-gray-600 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-gray-500 ">
+                Rp.
+              </div>
+              <input
+                defaultValue={5000}
+                min={5000}
+                value={amount}
+                onChange={checkValue}
+                type="text"
+                id="jumlah"
+                name="jumlah"
+                className="h-12 w-full appearance-none rounded-lg border-2 border-gray-200 bg-transparent py-2 text-lg tracking-tighter text-gray-900 outline-none transition-all placeholder:text-gray-600 focus:border-gray-900 ltr:pl-11 ltr:pr-5 rtl:pr-10 dark:border-gray-600 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-gray-500"
+                placeholder="0"
+              />
+            </div>
+          </div>
+        </div>
+        <div className="-mx-3 flex flex-wrap">
+          <div className="w-full px-3">
+            <Button type="submit" className="h-12 w-full">
+              Donasi
+            </Button>
+          </div>
+        </div>
+      </form>
+
+      {/* 
      <form
       className="relative flex w-full rounded-full lg:basis-72 "
       noValidate
@@ -61,8 +212,7 @@ function VoteActionButton() {
       <Button shape="rounded" color="success" className="h-12 flex-1">
         Donasi
       </Button>
-    </form>
-     
+    </form> */}
     </div>
   );
 }
@@ -77,7 +227,7 @@ export default function VoteDetailsCard({ vote }: any) {
       layout
       initial={{ borderRadius: 8 }}
       className={cn(
-        'mb-3 rounded-lg bg-white p-5 transition-shadow duration-200 dark:bg-light-dark xs:p-6 xl:p-4',
+        'mb-3 rounded-lg bg-white p-5 pt-6 transition-shadow duration-200 dark:bg-light-dark xs:p-6 xl:p-4',
         isExpand ? 'shadow-large' : 'shadow-card hover:shadow-large'
       )}
     >
@@ -88,7 +238,7 @@ export default function VoteDetailsCard({ vote }: any) {
           'lg:grid lg:grid-cols-2': layout === LAYOUT_OPTIONS.RETRO,
         })}
       >
-        <div>
+        <div className="mx-auto">
           <h3
             onClick={() => setIsExpand(!isExpand)}
             className="mb-6 cursor-pointer text-xl font-medium leading-normal dark:text-gray-100"
@@ -98,7 +248,7 @@ export default function VoteDetailsCard({ vote }: any) {
 
           {vote.status === 'active' && (
             <>
-              <h3 className="mb-4 text-sm text-gray-400  md:text-sm lg:text-sm md:text-gray-900 dark:md:text-gray-100 ">
+              <h3 className="mb-4 text-sm text-gray-400  md:text-sm md:text-gray-900 dark:md:text-gray-100 lg:text-sm ">
                 Berakhir dalam :
               </h3>
               <AuctionCountdown date={new Date(Date.now() + 172800000)} />

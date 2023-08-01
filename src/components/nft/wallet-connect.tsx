@@ -1,7 +1,5 @@
 'use client';
 
-import { useWeb3Modal } from '@web3modal/react';
-import { useAccount, useBalance, useDisconnect } from 'wagmi';
 import cn from 'classnames';
 import Button from '@/components/ui/button';
 import { Menu } from '@/components/ui/menu';
@@ -10,6 +8,9 @@ import ActiveLink from '@/components/ui/links/active-link';
 import { ChevronForward } from '@/components/icons/chevron-forward';
 import { PowerIcon } from '@/components/icons/power';
 
+import { useModal } from '@/components/modal-views/context';
+import { useState } from 'react';
+
 export default function WalletConnect({
   btnClassName,
   anchorClassName,
@@ -17,17 +18,13 @@ export default function WalletConnect({
   btnClassName?: string;
   anchorClassName?: string;
 }) {
-  const { address } = useAccount();
-  const { open } = useWeb3Modal();
-  const { data } = useBalance({
-    address,
-  });
-  const { disconnect } = useDisconnect();
-  const balance = data?.formatted;
+  const [state, setState] = useState(false);
+
+  const { openModal } = useModal();
 
   return (
     <>
-      {address ? (
+      {state ? (
         <div className="flex items-center gap-3 sm:gap-6 lg:gap-8">
           <div className="relative flex-shrink-0">
             <Menu>
@@ -58,18 +55,24 @@ export default function WalletConnect({
                   <Menu.Item>
                     <Menu.Item>
                       <div className="border-b border-dashed border-gray-200 px-6 py-5 dark:border-gray-700">
-                        <div className="flex items-center justify-between gap-3">
+                        <div className="mb-4 flex items-center justify-between gap-3">
                           <span className="text-sm font-medium -tracking-tighter text-gray-600 dark:text-gray-400">
-                            Balance
+                            Name
                           </span>
                           <span className="rounded-lg bg-gray-100 px-2 py-1 text-sm tracking-tighter dark:bg-gray-800">
-                            {address.slice(0, 6)}
-                            {'...'}
-                            {address.slice(address.length - 6)}
+                            Irfan
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between gap-3">
+                          <span className="text-sm font-medium -tracking-tighter text-gray-600 dark:text-gray-400">
+                            Status
+                          </span>
+                          <span className="rounded-lg bg-gray-100 px-2 py-1 text-sm tracking-tighter dark:bg-gray-800">
+                            Verified
                           </span>
                         </div>
                         <div className="mt-3 font-medium uppercase tracking-wider text-gray-900 dark:text-white">
-                          {balance} ETH
+                          ETH
                         </div>
                       </div>
                     </Menu.Item>
@@ -78,10 +81,10 @@ export default function WalletConnect({
                     <div className="p-3">
                       <div
                         className="flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-900 transition hover:bg-gray-50 dark:text-white dark:hover:bg-gray-800"
-                        onClick={() => disconnect()}
+                        // onClick={() => disconnect()}
                       >
                         <PowerIcon />
-                        <span className="grow uppercase">Disconnect</span>
+                        <span className="grow uppercase">Logout</span>
                       </div>
                     </div>
                   </Menu.Item>
@@ -94,14 +97,17 @@ export default function WalletConnect({
             <Button
               className={cn('shadow-main hover:shadow-large', btnClassName)}
             >
-              CREATE
+              Create Campaign
             </Button>
           </ActiveLink>
         </div>
       ) : (
         <Button
-          onClick={() => open()}
-          className={cn('shadow-main hover:shadow-large', btnClassName)}
+          onClick={() => openModal('LOGIN')}
+          className={cn(
+            'rounded-xl shadow-main hover:shadow-large',
+            btnClassName
+          )}
         >
           Login
         </Button>

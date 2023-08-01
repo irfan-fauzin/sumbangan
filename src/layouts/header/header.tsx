@@ -38,7 +38,6 @@ function NotificationButton() {
 function HeaderRightArea() {
   return (
     <div className="relative order-last flex shrink-0 items-center gap-4 sm:gap-6 lg:gap-8">
-    
       <WalletConnect />
     </div>
   );
@@ -75,7 +74,6 @@ export function RetroHeader({ className }: { className?: string }) {
               className="dark:text-white"
             />
           </div>
-          
         </div>
         <HeaderRightArea />
       </div>
@@ -114,7 +112,6 @@ export function ClassicHeader({ className }: { className?: string }) {
               className="dark:text-white"
             />
           </div>
-          
         </div>
         <HeaderRightArea />
       </div>
@@ -153,7 +150,6 @@ export default function Header({ className }: { className?: string }) {
               className="dark:text-white"
             />
           </div>
-          
         </div>
         <HeaderRightArea />
       </div>

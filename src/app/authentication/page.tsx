@@ -45,9 +45,6 @@ export default function SignIn() {
           </p>
         </div>
       </div>
-      <div className="relative hidden bg-[#F3F4F6] lg:block">
-        <Image src={BitcoinImg} alt="sign-up" fill className="object-cover" />
-      </div>
     </div>
   );
 }
