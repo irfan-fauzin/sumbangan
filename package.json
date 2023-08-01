@@ -5,10 +5,11 @@
   "scripts": {
     "clean": "rimraf -g \"{node_modules,.next,out.cache}\"",
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.15",

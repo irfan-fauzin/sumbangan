@@ -5,7 +5,7 @@ import { Fira_Code } from '@next/font/google';
 import cn from 'classnames';
 import { QueryClientProvider } from '@/app/shared/query-client-provider';
 import { ThemeProvider } from '@/app/shared/theme-provider';
-import WagmiConfig from '@/app/shared/wagmi-config';
+
 import ModalsContainer from '@/components/modal-views/container';
 import DrawersContainer from '@/components/drawer-views/container';
 import SettingsButton from '@/components/settings/settings-button';
