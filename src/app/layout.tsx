@@ -25,11 +25,6 @@ const fira_code = Fira_Code({
   display: 'swap',
 });
 
-export const metadata = {
-  title: 'Sumbangan Bebasis Blockchain',
-  description: '-',
-};
-
 export default function RootLayout({
   children,
 }: {
