@@ -9,25 +9,17 @@ const rupiah = (number: any) => {
 };
 
 interface VotePollTypes {
-  title: string;
-  accepted?: {
-    vote: number;
-    percentage: number;
-  };
-  rejected?: {
-    vote: number;
-    percentage: number;
-  };
+  data: any;
 }
 
 function percentage(partialValue: any, totalValue: any) {
   return ((100 * partialValue) / totalValue).toFixed(2);
 }
 
-export default function VotePoll({ title, accepted, rejected }: VotePollTypes) {
+export default function VotePoll({ data }: VotePollTypes) {
   return (
     <motion.div layout className="mb-6">
-      <h4 className="mb-3 uppercase dark:text-gray-100">{title}</h4>
+      <h4 className="mb-3 uppercase dark:text-gray-100">{data.Title}</h4>
       <div className="mb-3">
         <svg width="100%" height="8">
           <rect x="0" y="0" width="100%" height="8" fill="#FA606A" />
@@ -36,7 +28,7 @@ export default function VotePoll({ title, accepted, rejected }: VotePollTypes) {
             y="0"
             height="8"
             fill="#28D294"
-            width={`${percentage(accepted?.vote, rejected?.vote)}%`}
+            width={`${percentage(data.Collected, data.Target)}%`}
           />
         </svg>
       </div>
@@ -46,35 +38,32 @@ export default function VotePoll({ title, accepted, rejected }: VotePollTypes) {
             Terkumpul
           </h5>
 
-          {accepted?.vote > rejected?.vote ? (
-            <p>{rupiah(accepted?.vote)}</p>
+          {data.Collected > data.Target ? (
+            <p>{rupiah(data.Collected)}</p>
           ) : (
             <p>
-              {rupiah(accepted?.vote)} (
-              {percentage(accepted?.vote, rejected?.vote)}%)
+              {rupiah(data.Collected)} (
+              {percentage(data.Collected, data.Target)}%)
             </p>
           )}
         </div>
         <div className="ltr:text-right rtl:text-left">
-          {accepted?.vote > rejected?.vote ? (
-            <div className='text-green-500'>
+          {data.Collected > data.Target ? (
+            <div className="text-green-500">
               <h5 className="mb-1 font-medium uppercase text-green-500 sm:mb-2 sm:text-base">
                 MELEBIHI TARGET 😍
               </h5>
-              +{rupiah(accepted?.vote - rejected?.vote)} (
-              {(100 - percentage(accepted?.vote, rejected?.vote) * -1).toFixed(
-                2
-              )}
+              +{rupiah(data.Collected - data.Target)} (
+              {(100 - percentage(data.Collected, data.Target) * -1).toFixed(2)}
               %)
             </div>
           ) : (
-            <div className='text-red-500'>
-            
+            <div className="text-red-500">
               <h5 className="mb-1 font-medium uppercase  sm:mb-2 sm:text-base">
                 KURANG
               </h5>
-              - {rupiah(rejected?.vote - accepted?.vote)} (
-              {(100 - percentage(accepted?.vote, rejected?.vote)).toFixed(2)}%)
+              - {rupiah(data.Target - data.Collected)} (
+              {(100 - percentage(data.Collected, data.Target)).toFixed(2)}%)
             </div>
           )}
         </div>

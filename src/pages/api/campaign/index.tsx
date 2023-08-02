@@ -78,7 +78,10 @@ export default async function Usehandle(
 
     case 'GET': {
       const result = await prisma.campaign.findMany({
-        include: {},
+        include: {
+          user: true,
+          donate: true,
+        },
       });
       return res.json(result);
     }

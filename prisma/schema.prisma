@@ -17,7 +17,7 @@ model User {
   role             Role       @default(CAMPAIGN_MANAGER)
   createdAt        DateTime   @default(now()) @map("created_at")
   verified         Boolean    @default(false)
-  created_campaign Campaign[] @relation("CampaignToUser")
+  campaign         Campaign[]
 }
 
 model Campaign {
@@ -25,23 +25,33 @@ model Campaign {
   Title        String?  @unique
   Image        String?
   Description  String?
+  Collected    Int
   Target       Int
-  Status       Boolean  @default(true)
+  Status       Status  @default(active)
   Date_created DateTime @default(now())
   Date_end     String?
-  donate       Donate?
-  created_by   User[]   @relation("CampaignToUser")
+  donate       Donate[]
+  created_by   Int?
+  user         User?     @relation(fields: [created_by], references: [id])
+
 }
 
 model Donate {
-  id_donate Int      @id
-  Amount    Int?
-  Mesage    String?
-  Name      String?
-  donate    Campaign @relation(fields: [id_donate], references: [id])
+  id_donate     Int         @id
+  user          Campaign?   @relation(fields: [id_donate], references: [id])
+  Amount        Int?
+  Message       String?
+  Name          String?
+  Donation_date DateTime    @default(now())
+
 }
 
 enum Role {
   ADMIN
   CAMPAIGN_MANAGER
+}
+
+enum Status {
+  active
+  past
 }

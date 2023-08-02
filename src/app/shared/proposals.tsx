@@ -43,7 +43,7 @@ const ProposalsPage = () => {
           )}
         </>
       ),
-      path: 'aktif',
+      path: 'active',
     },
     // {
     //   title: (
@@ -82,7 +82,7 @@ const ProposalsPage = () => {
           )}
         </>
       ),
-      path: 'selesai',
+      path: 'past',
     },
   ];
   return (
@@ -125,7 +125,7 @@ const ProposalsPage = () => {
       <Suspense fallback={<Loader variant="blink" />}>
         <ParamTab tabMenu={tabMenuItems}>
           <TabPanel className="focus:outline-none">
-            <VoteList voteStatus={'Aktif'} />
+            <VoteList voteStatus={'active'} />
           </TabPanel>
           {/* <TabPanel className="focus:outline-none">
             <>
@@ -170,7 +170,7 @@ const ProposalsPage = () => {
             <VoteList voteStatus={'executable'} />
           </TabPanel> */}
           <TabPanel className="focus:outline-none">
-            <VoteList voteStatus={'Selesai'} />
+            <VoteList voteStatus={'past'} />
           </TabPanel>
         </ParamTab>
       </Suspense>
