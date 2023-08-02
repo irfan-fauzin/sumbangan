@@ -20,6 +20,7 @@ export default function SignInForm() {
   const router = useRouter();
 
   async function handleSubmit(event: any) {
+    event.preventDefault();
     const result = await signIn('credentials', {
       redirect: true,
       username: event.currentTarget.username.value,

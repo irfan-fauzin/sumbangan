@@ -1,17 +1,37 @@
+// @ts-nocheck
+'use client';
+
 import { motion, LayoutGroup } from 'framer-motion';
 import VoteDetailsCard from '@/components/vote/vote-details/vote-details-card';
 import { ExportIcon } from '@/components/icons/export-icon';
-// static data
-import { getVotesByStatus } from '@/data/static/vote-data';
+
+import useSWR from 'swr';
+const url = '/api/campaign';
+const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
 export default function VoteList({ voteStatus }: { voteStatus: string }) {
-  const { votes, totalVote } = getVotesByStatus(voteStatus);
+  const { data, isLoading, error } = useSWR('/api/campaign', fetcher);
+
+  if (error)
+    return <div>Koneksi internet bermasalah atau Server sedang gangguan</div>;
+
+  if (isLoading)
+    return (
+      <>
+        <div className="flex justify-center pt-10">
+          <span className="loader"></span>
+        </div>
+      </>
+    );
+
+  console.log(data);
+
   return (
     <LayoutGroup>
       <motion.div layout initial={{ borderRadius: 16 }} className="rounded-2xl">
-        {totalVote > 0 ? (
-          votes.map((vote: any) => (
-            <VoteDetailsCard key={`${vote.title}-key-${vote.id}`} vote={vote} />
+        {data ? (
+          data.map((campaign: any) => (
+            <VoteDetailsCard key={`${campaign.id}`} vote={campaign} />
           ))
         ) : (
           <div className="flex flex-col items-center justify-center rounded-lg bg-white px-4 py-16 text-center shadow-card dark:bg-light-dark xs:px-6 md:px-5 md:py-24">

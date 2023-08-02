@@ -18,6 +18,7 @@ import { LAYOUT_OPTIONS } from '@/lib/constants';
 import Image from 'next/image';
 
 import darkLogo from '@/assets/images/sedekah-subuh.png';
+import midtransClient from 'midtrans-client';
 
 const Xendit = require('xendit-node');
 const x = new Xendit({
@@ -42,65 +43,44 @@ function VoteActionButton() {
     // Stop the form from submitting and refreshing the page.
     event.preventDefault();
 
-    // Get data from the form.
-    const data = {
+    const midtransClient = require('midtrans-client');
+    // Create Snap API instance
+    let snap = new midtransClient.Snap({
+      isProduction: false,
+      serverKey: 'SB-Mid-server-OewX64Bw2kFwLEM9hewKrHEU',
+      clientKey: 'SB-Mid-client-hNKmL7okCvqzNHUv',
+    });
+
+    let parameter = {
       transaction_details: {
-        order_id: 'concert-ticket-053',
-        gross_amount: 190000,
+        order_id: 'test-transaction-123',
+        gross_amount: 200000,
       },
       credit_card: {
         secure: true,
       },
-      usage_limit: 5,
-      expiry: {
-        duration: 30,
-        unit: 'days',
-      },
-      item_details: [
-        {
-          id: 'tix-001',
-          name: 'Exclusive Tour Concert Day 1',
-          price: 95000,
-          quantity: 2,
-        },
-      ],
-      customer_details: {
-        first_name: 'John',
-        last_name: 'Doe',
-        email: 'john.doe@example.com',
-        phone: '+62181000000000',
-        notes:
-          'Thank you for your order. Please follow the instructions to complete payment.',
-      },
-    };
-    // Send the data to the server in JSON format.
-    const JSONdata = JSON.stringify(data);
-
-    // API endpoint where we send form data.
-    const endpoint = 'https://app.sandbox.midtrans.com/snap/v1/payment-links';
-
-    // Form the request for sending data to the server.
-    const options = {
-      // The method is POST because we are sending data.
-      method: 'POST',
-      // Tell the server we're sending JSON.
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Content-Type': 'application/json',
-        Authorization:
-          'Basic U0ItTWlkLXNlcnZlci1PZXdYNjRCdzJrRndMRU05aGV3S3JIRVU6',
-      },
-      // Body of the request is the JSON data we created above.
-      body: JSONdata,
     };
 
-    // Send the form data to our forms API on Vercel and get a response.
-    const response = await fetch(endpoint, options);
+    try {
+      // create transaction
+      snap
+        .createTransaction(parameter)
+        .then((transaction) => {
+          // transaction token
+          let transactionToken = transaction.token;
+          console.log('transactionToken:', transactionToken);
 
-    // Get the response data from server as JSON.
-    // If server returns the name submitted, that means the form works.
-    const result = await response.json();
-    console.log(result);
+          // transaction redirect url
+          let transactionRedirectUrl = transaction.redirect_url;
+          console.log('transactionRedirectUrl:', transactionRedirectUrl);
+        })
+        .catch((e) => {
+          console.log('Error occured:', e.message);
+        });
+    } catch (err) {
+      console.log(err);
+      console.log(err.stack);
+    }
   }
 
   return (
@@ -238,20 +218,20 @@ export default function VoteDetailsCard({ vote }: any) {
           'lg:grid lg:grid-cols-2': layout === LAYOUT_OPTIONS.RETRO,
         })}
       >
-        <div className="mx-auto">
+        <div className="p-6">
           <h3
             onClick={() => setIsExpand(!isExpand)}
             className="mb-6 cursor-pointer text-xl font-medium leading-normal dark:text-gray-100"
           >
-            {vote.title}
+            {vote.Title}
           </h3>
 
-          {vote.status === 'active' && (
+          {vote.Status === true && (
             <>
               <h3 className="mb-4 text-sm text-gray-400  md:text-sm md:text-gray-900 dark:md:text-gray-100 lg:text-sm ">
                 Berakhir dalam :
               </h3>
-              <AuctionCountdown date={new Date(Date.now() + 172800000)} />
+              <AuctionCountdown date={vote.Date_end} />
             </>
           )}
 
@@ -260,7 +240,7 @@ export default function VoteDetailsCard({ vote }: any) {
           </p> */}
 
           {/* show only when vote is active */}
-          {vote.status === 'active' && (
+          {vote.Status && (
             <>
               {!isExpand ? (
                 <Button
@@ -277,7 +257,7 @@ export default function VoteDetailsCard({ vote }: any) {
           )}
 
           {/* show only for past vote */}
-          {vote.status === 'past' && (
+          {!vote.Status && (
             <time className="mt-4 block text-gray-400 xs:mt-6 md:mt-7">
               <span className="font-medium">Dibuat</span> pada{' '}
               {dayjs(vote.executed_at).format('MMM DD, YYYY')}
@@ -286,7 +266,7 @@ export default function VoteDetailsCard({ vote }: any) {
         </div>
 
         {/* vote countdown timer only for active & off-chain vote */}
-        {['active', 'off-chain'].indexOf(vote.status) !== -1 && (
+        {[true].indexOf(vote.Status) !== -1 && (
           <div
             className={cn(
               "before:content-[' '] relative grid h-full gap-2 before:absolute before:bottom-0 before:border-b before:border-r before:border-dashed before:border-gray-200 ltr:before:left-0 rtl:before:right-0 dark:border-gray-700 dark:before:border-gray-700 xs:gap-2.5 ",
@@ -304,13 +284,16 @@ export default function VoteDetailsCard({ vote }: any) {
               alt="desc"
               width={640}
               height={600}
-              src={darkLogo}
+              src={
+                'https://res.cloudinary.com/dg9jmbmg6/image/upload/f_auto,q_auto/v1/sumbangan/' +
+                vote.Image
+              }
             />
           </div>
         )}
 
         {/* switch toggle indicator for past vote */}
-        {vote.status === 'past' && (
+        {vote.Status === false && (
           <div className="mb-4 flex items-center gap-3 md:mb-0 md:items-start md:justify-end">
             <Switch
               checked={isExpand}
@@ -356,24 +339,24 @@ export default function VoteDetailsCard({ vote }: any) {
             <div className="my-6 border-y border-dashed border-gray-200 py-6 text-gray-500 dark:border-gray-700 dark:text-gray-400">
               Penggalangan dana oleh:{' '}
               <a
-                href={vote.proposed_by.link}
+                href={vote.created_by}
                 className="ml-1 inline-flex items-center gap-3 font-medium text-gray-900 hover:underline hover:opacity-90 focus:underline focus:opacity-90 dark:text-gray-100"
                 title="Terverifikasi"
               >
-                {vote.proposed_by.id} <CheckmarkIcon className="h-auto w-3" />
+                {vote.created_by} <CheckmarkIcon className="h-auto w-3" />
               </a>
             </div>
-            <VotePoll
+            {/* <VotePoll
               title={''}
-              accepted={vote?.accepted}
+              accepted={0}
               rejected={vote?.rejected}
-            />
-            <VoterTable votes={vote?.votes} />
+            /> */}
+            {/* <VoterTable votes={vote?.votes} /> */}
             <RevealContent defaultHeight={250}>
               <h4 className="mb-6 uppercase dark:text-gray-100">Description</h4>
               <div
                 className="dynamic-html grid gap-2 leading-relaxed text-gray-600 dark:text-gray-400"
-                dangerouslySetInnerHTML={{ __html: vote.description }}
+                dangerouslySetInnerHTML={{ __html: vote.Description }}
               />
             </RevealContent>
             {/* <RevealContent
