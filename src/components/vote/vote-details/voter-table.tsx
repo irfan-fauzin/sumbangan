@@ -91,7 +91,7 @@ export default function VoterTable({ votes }: VoterTableTypes) {
   );
   let { pageIndex } = state;
   useEffect(() => {
-    setPageSize(5);
+    setPageSize(10);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
