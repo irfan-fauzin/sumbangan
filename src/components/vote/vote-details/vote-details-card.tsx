@@ -77,7 +77,7 @@ export default function VoteDetailsCard({ vote }: any) {
     // If server returns the name submitted, that means the form works.
     const result = await response.json();
 
-    window.open(result.message, '_blank').focus();
+    window.open(result.message);
     setIsLoading(false);
   }
 

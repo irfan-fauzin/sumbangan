@@ -25,7 +25,6 @@ model Campaign {
   Title        String?  @unique
   Image        String?
   Description  String?
-  Collected    Int
   Target       Int
   Status       Status  @default(active)
   Date_created DateTime @default(now())

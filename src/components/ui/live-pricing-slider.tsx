@@ -8,63 +8,14 @@ import { useBreakpoint } from '@/lib/hooks/use-breakpoint';
 import cn from 'classnames';
 import { priceFeedData } from '@/data/static/price-feed';
 import Link from 'next/link';
-
-type LivePriceFeedProps = {
-  name: string;
-  symbol: string;
-  balance: string;
-  usdBalance: string;
-};
-
-export function LivePricingFeed({
-  name,
-  symbol,
-
-  balance,
-  usdBalance,
-}: LivePriceFeedProps) {
-  return (
-    <div
-      className={cn(
-        'mb-6 flex items-center gap-4 rounded-lg bg-white p-5 shadow-[0_8px_16px_rgba(17,24,39,0.05)] dark:bg-light-dark lg:flex-row'
-      )}
-    >
-      <div className="w-full flex-col">
-        <Link
-          href={'https://test.com'}
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          <div className="mb-3 flex items-center justify-between">
-            <h4 className="truncate text-sm font-medium text-gray-900  dark:text-white">
-              {name}
-            </h4>
-
-            <div className="truncate text-xs -tracking-wide text-gray-600 ltr:pl-2 rtl:pr-2 dark:text-gray-400 xs:text-sm ">
-              08-02-2023
-            </div>
-          </div>
-
-          <div className="mb-2 text-sm font-medium tracking-tighter text-gray-900 dark:text-white lg:text-lg 2xl:text-xl 3xl:text-2xl">
-            {balance}
-            <span className="ml-3">{symbol}</span>
-          </div>
-
-          <div className="flex items-center text-xs font-medium 2xl:text-sm">
-            <span
-              className="truncate text-xs tracking-tighter text-gray-600 ltr:mr-5 rtl:ml-5 dark:text-gray-400 2xl:w-24 3xl:w-auto"
-              title={`${usdBalance}`}
-            >
-              {usdBalance}
-            </span>
-          </div>
-        </Link>
-      </div>
-    </div>
-  );
-}
+import useSWR from 'swr';
+const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
 export default function LivePricingSlider({ limits }: { limits: number }) {
+  const { data } = useSWR('/api/campaign/donate', fetcher);
+
+  console.log(JSON.stringify(data?.campaign?.Title) + 'TEEEEE');
+
   const breakpoint = useBreakpoint();
 
   const limit = limits ?? 4;
@@ -92,26 +43,68 @@ export default function LivePricingSlider({ limits }: { limits: number }) {
     },
   };
 
+  function formatDate(string) {
+    var options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return new Date(string).toLocaleDateString('id-ID', options);
+  }
+
   return (
-    <Swiper
-      modules={[Autoplay, Pagination, A11y]}
-      spaceBetween={24}
-      slidesPerView={1}
-      breakpoints={sliderBreakPoints}
-      pagination={{ clickable: true }}
-      observer={true}
-      dir="ltr"
-      className="w-full pb-10"
-      autoplay={{
-        delay: 2500,
-        disableOnInteraction: false,
-      }}
-    >
-      {priceFeedData.map((item) => (
-        <SwiperSlide key={item.id}>
-          <LivePricingFeed {...item} />
-        </SwiperSlide>
-      ))}
-    </Swiper>
+    <>
+      <Swiper
+        modules={[Autoplay, Pagination, A11y]}
+        spaceBetween={24}
+        slidesPerView={1}
+        breakpoints={sliderBreakPoints}
+        pagination={{ clickable: true }}
+        observer={true}
+        dir="ltr"
+        className="w-full pb-10"
+        autoplay={{
+          delay: 2500,
+          disableOnInteraction: false,
+        }}
+      >
+        {data?.map((item) => (
+          <SwiperSlide key={item.id}>
+            <div
+              className={cn(
+                'mb-6 flex items-center gap-4 rounded-lg bg-white p-5 shadow-[0_8px_16px_rgba(17,24,39,0.05)] dark:bg-light-dark lg:flex-row'
+              )}
+            >
+              <div className="w-full flex-col">
+                <Link
+                  href={'https://test.com'}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  <div className="mb-3 flex items-center justify-between">
+                    <h4 className="truncate text-sm font-medium text-gray-900  dark:text-white">
+                      {item?.Name}
+                    </h4>
+
+                    <div className="truncate text-xs -tracking-wide text-gray-600 ltr:pl-2 rtl:pr-2 dark:text-gray-400 xs:text-sm ">
+                      {formatDate(item?.Donation_date)}
+                    </div>
+                  </div>
+
+                  <div className="mb-2 text-sm font-medium tracking-tighter text-gray-900 dark:text-white lg:text-lg 2xl:text-xl 3xl:text-2xl">
+                    Rp.{' '}
+                    {String(item?.Amount)
+                      .replace(/\D/g, '')
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                  </div>
+
+                  <div className="flex items-center text-xs font-medium 2xl:text-sm">
+                    <span className="truncate text-xs tracking-tighter text-gray-600 ltr:mr-5 rtl:ml-5 dark:text-gray-400 2xl:w-24 3xl:w-auto">
+                      {item['campaign'][0]['Title']}
+                    </span>
+                  </div>
+                </Link>
+              </div>
+            </div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    </>
   );
 }

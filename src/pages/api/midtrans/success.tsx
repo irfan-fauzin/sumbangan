@@ -5,6 +5,7 @@ import { Prisma, PrismaClient } from '@prisma/client';
 import { campaignMenuItems } from '@/layouts/sidebar/_menu-items';
 
 const prisma = new PrismaClient();
+import { mutate } from 'swr';
 
 export default async function Usehandle(
   req: NextApiRequest,
@@ -28,6 +29,8 @@ export default async function Usehandle(
             Donation_date: date,
           },
         });
+
+        mutate('/api/campaign');
 
         return res.status(200).json(result);
       } catch (e) {

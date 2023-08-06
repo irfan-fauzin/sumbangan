@@ -1,5 +1,6 @@
 'use client';
 
+import { mutate } from 'swr';
 import React from 'react';
 import Image from '@/components/ui/image';
 import AnchorLink from '@/components/ui/links/anchor-link';
@@ -36,6 +37,7 @@ const Layout = ({ children }: React.PropsWithChildren) => {
 };
 
 const NotFoundPage = () => {
+  mutate('/api/campaign');
   const { layout } = useLayout();
   const isMounted = useIsMounted();
   const { isDarkMode } = useIsDarkMode();
