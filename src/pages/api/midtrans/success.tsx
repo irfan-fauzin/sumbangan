@@ -11,7 +11,7 @@ export default async function Usehandle(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { order_id, transaction_time } = req.body;
+  const { order_id, transaction_time, payment_type } = req.body;
   const date = new Date(transaction_time);
 
   switch (req.method) {
@@ -27,6 +27,7 @@ export default async function Usehandle(
           data: {
             status: 'paid',
             Donation_date: date,
+            payment_method: payment_type
           },
         });
 

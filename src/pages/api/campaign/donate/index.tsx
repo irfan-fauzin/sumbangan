@@ -16,6 +16,10 @@ export default async function Usehandle(
   switch (req.method) {
     case 'GET': {
       const result = await prisma.donate.findMany({
+        take: 25,
+        orderBy: {
+            Donation_date: 'desc',
+          },
         include: {
           campaign: {
             select: {

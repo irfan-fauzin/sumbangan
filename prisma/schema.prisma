@@ -46,6 +46,7 @@ model Donate {
   Donation_date       DateTime?
   status              Status_Payment @default(unpaid)
   email               String?
+  payment_method      String?
 
 }
 

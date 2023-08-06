@@ -15,7 +15,31 @@ import TopupButton from '@/components/ui/topup-button';
 //images
 import AuthorImage from '@/assets/images/rupiah.png';
 
+import useSWR from 'swr';
+
 export default function ModernScreen() {
+  const fetcher = (...args) => fetch(...args).then((res) => res.json());
+  const {
+    data: donate,
+    error,
+    isLoading,
+  } = useSWR('/api/campaign/amount', fetcher);
+
+  const { data: donate2 } = useSWR('/api/campaign/donate', fetcher);
+  if(!donate2) return null; 
+
+  if (error)
+    return <div>Koneksi internet bermasalah atau Server sedang gangguan</div>;
+
+  if (isLoading)
+    return (
+      <>
+        <div className="flex justify-center pt-10">
+          <span className=" loader"></span>
+        </div>
+      </>
+    );
+
   return (
     <>
       <div className="mt-8 grid gap-6 sm:my-10 md:grid-cols-2">
@@ -29,7 +53,12 @@ export default function ModernScreen() {
             'w-full lg:w-[calc(100%-288px)] ltr:lg:pr-6 rtl:lg:pl-6 2xl:w-[calc(100%-320px)] 3xl:w-[calc(100%-358px)]'
           )}
         >
-          <TransactionTable />
+          <TransactionTable
+            {...{
+              aaa: donate2,
+             
+            }}
+          />
         </div>
         <div
           className={cn(
@@ -47,7 +76,10 @@ export default function ModernScreen() {
               Jumlah Dana Terkumpul
             </h3>
             <div className="mb-7 text-center font-medium tracking-tighter text-gray-900 dark:text-white xl:text-2xl 3xl:mb-8 3xl:text-[32px]">
-              10,86,000
+              Rp.{' '}
+              {String(donate._sum.Amount)
+                .replace(/\D/g, '')
+                .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
             </div>
           </div>
           <TopPools />

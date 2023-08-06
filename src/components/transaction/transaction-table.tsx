@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 'use client';
 
 import React from 'react';
@@ -14,44 +16,59 @@ import { ChevronDown } from '@/components/icons/chevron-down';
 import { LongArrowRight } from '@/components/icons/long-arrow-right';
 import { LongArrowLeft } from '@/components/icons/long-arrow-left';
 import { LinkIcon } from '@/components/icons/link-icon';
-import { TransactionData } from '@/data/static/transaction-data';
+import useSWR from 'swr';
 
-const COLUMNS = [
+function formatDate(string) {
+  var options = {year: 'numeric', month: '2-digit', day: '2-digit',
+  hour: '2-digit', minute: '2-digit', second: '2-digit',
+  timeZone: 'Asia/Jakarta',
+  timeZoneName: 'short'};
+  return new Date(string).toLocaleDateString('id-ID', options);
+}
+
+
+const COLUMNS = React.useMemo(
+  () => [
+
+
   {
-    Header: 'ID',
-    accessor: 'id',
-    minWidth: 60,
-    maxWidth: 80,
-  },
-  {
-    Header: 'Type',
-    accessor: 'transactionType',
-    minWidth: 60,
-    maxWidth: 80,
-  },
-  {
-    Header: () => <div className="ltr:ml-auto rtl:mr-auto">Date</div>,
-    accessor: 'createdAt',
+    Header: () => <div className="ltr:mr-auto rtl:ml-auto">Donatur</div>,
+    accessor: 'Name',
     // @ts-ignore
     Cell: ({ cell: { value } }) => (
-      <div className="ltr:text-right rtl:text-left">{value}</div>
+      <div className="ltr:text-left rtl:text-right">{value}</div>
     ),
-    minWidth: 160,
-    maxWidth: 220,
+    minWidth: 200,
+    maxWidth: 200,
   },
+
   {
-    Header: () => <div className="ltr:ml-auto rtl:mr-auto">Asset</div>,
-    accessor: 'symbol',
+    Header: () => <div className="ltr:mr-auto rtl:ml-auto">Amount</div>,
+    accessor: 'Amount',
     // @ts-ignore
     Cell: ({ cell: { value } }) => (
-      <div className="ltr:text-right rtl:text-left">{value}</div>
+      <div className="-tracking-[1px] ltr:text-right rtl:text-left">
+        <strong className="mb-0.5 flex justify-start  md:mb-1.5  ">
+        Rp.{' '}
+              {String(value)
+                .replace(/\D/g, '')
+                .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+          <span className="inline-block ltr:ml-1.5 rtl:mr-1.5 md:ltr:ml-2 md:rtl:mr-2">
+            
+          </span>
+        </strong>
+       
+      </div>
     ),
-    minWidth: 80,
-    maxWidth: 120,
+    minWidth: 100,
+    maxWidth: 150,
   },
+
+ 
+  
   {
-    Header: () => <div className="ltr:ml-auto rtl:mr-auto">Status</div>,
-    accessor: 'status',
+    Header: () => <div className="ltr:mr-auto rtl:ml-auto">Payment</div>,
+    accessor: 'payment_method',
     // @ts-ignore
     Cell: ({ cell: { value } }) => (
       <div className="ltr:text-right rtl:text-left">{value}</div>
@@ -60,42 +77,43 @@ const COLUMNS = [
     maxWidth: 180,
   },
   {
-    Header: () => <div className="ltr:ml-auto rtl:mr-auto">Address</div>,
-    accessor: 'address',
+    Header: () => <div className="ltr:mr-auto rtl:mr-auto">Transaksi Solana</div>,
+    accessor: 'tx_solana',
     // @ts-ignore
     Cell: ({ cell: { value } }) => (
-      <div className="flex items-center justify-end">
-        <LinkIcon className="h-[18px] w-[18px] ltr:mr-2 rtl:ml-2" /> {value}
+      <div className="flex items-center justify-start">
+        <LinkIcon className="h-[18px] w-[18px] ltr:mr-2 rtl:ml-2" /> <a href={`https://solscan.io/tx/`+value}>Link</a>
       </div>
     ),
     minWidth: 220,
     maxWidth: 280,
   },
+ 
+
   {
-    Header: () => <div className="ltr:ml-auto rtl:mr-auto">Amount</div>,
-    accessor: 'amount',
+    Header: () => <div className="ltr:ml-auto rtl:mr-auto">Date</div>,
+    accessor: 'Donation_date',
     // @ts-ignore
     Cell: ({ cell: { value } }) => (
-      <div className="-tracking-[1px] ltr:text-right rtl:text-left">
-        <strong className="mb-0.5 flex justify-end text-base md:mb-1.5 md:text-lg lg:text-base 3xl:text-2xl">
-          {value.balance}
-          <span className="inline-block ltr:ml-1.5 rtl:mr-1.5 md:ltr:ml-2 md:rtl:mr-2">
-            BTC
-          </span>
-        </strong>
-        <span className="text-gray-600 dark:text-gray-400">
-          ${value.usdBalance}
-        </span>
-      </div>
+      <div className="ltr:text-right rtl:text-left">{formatDate(value)}</div>
     ),
-    minWidth: 200,
+    minWidth: 280,
     maxWidth: 300,
   },
-];
+],
+[]
+);
 
 export default function TransactionTable() {
-  const data = React.useMemo(() => TransactionData, []);
-  const columns = React.useMemo(() => COLUMNS, []);
+  const fetcher = (...args) => fetch(...args).then((res) => res.json());
+    const { data, error, isLoading } = useSWR("/api/campaign/donate", fetcher);
+
+    if (error) return <div>Failed to fetch users.</div>;
+    if (isLoading) return <h2>Loading...</h2>;
+
+
+ 
+
 
   const {
     getTableProps,
@@ -111,8 +129,8 @@ export default function TransactionTable() {
     prepareRow,
   } = useTable(
     {
-      // @ts-ignore
-      columns,
+     
+      COLUMNS,
       data,
       initialState: { pageSize: 5 },
     },

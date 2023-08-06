@@ -1,12 +1,11 @@
 'use client';
 
-import { ArrowUp } from '@/components/icons/arrow-up';
-import { ResponsiveContainer, AreaChart, Area } from 'recharts';
+
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { A11y, Pagination, Autoplay } from 'swiper';
 import { useBreakpoint } from '@/lib/hooks/use-breakpoint';
 import cn from 'classnames';
-import { priceFeedData } from '@/data/static/price-feed';
+
 import Link from 'next/link';
 import useSWR from 'swr';
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
@@ -14,7 +13,7 @@ const fetcher = (...args) => fetch(...args).then((res) => res.json());
 export default function LivePricingSlider({ limits }: { limits: number }) {
   const { data } = useSWR('/api/campaign/donate', fetcher);
 
-  console.log(JSON.stringify(data?.campaign?.Title) + 'TEEEEE');
+
 
   const breakpoint = useBreakpoint();
 
