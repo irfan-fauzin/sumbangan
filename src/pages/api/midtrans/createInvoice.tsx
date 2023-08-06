@@ -9,12 +9,31 @@ export default async function Usehandle(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { order_id, amount } = req.body;
+  const { order_id, amount, id_campaign, name_campaign, name, email, message } =
+    req.body;
 
   switch (req.method) {
     case 'POST': {
       try {
+        await prisma.campaign.update({
+          where: {
+            id: Number(id_campaign),
+          },
+          data: {
+            donate: {
+              create: {
+                Amount: amount,
+                Message: message ? message : undefined,
+                email: email ? email : undefined,
+                Name: name ? name : 'Orang Baik',
+                tx_midtrans: order_id,
+              },
+            },
+          },
+        });
+
         const midtransClient = require('midtrans-client');
+
         // Create Snap API instance
         let snap = new midtransClient.Snap({
           isProduction: false,
@@ -27,21 +46,20 @@ export default async function Usehandle(
             order_id: order_id,
             gross_amount: amount,
           },
-          credit_card: {
-            secure: true,
+
+          customer_details: {
+            first_name: name ? name : 'Orang Baik',
+            email: email ? email : undefined,
+            notes: message ? message : undefined,
           },
+          id_campaign: id_campaign,
+          name_campaign: name_campaign,
         };
 
         snap.createTransaction(parameter).then((transaction) => {
-          // transaction token
-          let transactionToken = transaction.token;
-          console.log('transactionToken:', transactionToken);
-
-          // transaction redirect url
-          const result = transaction.redirect_url;
-          console.log('transactionRedirectUrl:', result);
-
-          return res.status(200).json({ status: 'success', message: result });
+          const url = transaction.redirect_url;
+          const test = transaction.transaction_id;
+          return res.status(201).json({ message: url });
         });
 
         // const result = await prisma.donate.create({

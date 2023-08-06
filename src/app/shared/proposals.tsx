@@ -10,19 +10,20 @@ import ParamTab, { TabPanel } from '@/components/ui/param-tab';
 import VoteList from '@/components/vote/vote-list';
 import { ExportIcon } from '@/components/icons/export-icon';
 // static data
-import { getVotesByStatus } from '@/data/static/vote-data';
+import { GetVotesByStatus } from '@/components/vote/vote-data';
 import votePool from '@/assets/images/vote-pool.svg';
 import { useLayout } from '@/lib/hooks/use-layout';
 import { LAYOUT_OPTIONS } from '@/lib/constants';
 import Loader from '@/components/ui/loader';
+import LivePricingSlider from '@/components/ui/live-pricing-slider';
 
 const ProposalsPage = () => {
   const router = useRouter();
   const { layout } = useLayout();
-  const { totalVote: totalActiveVote } = getVotesByStatus('active');
-  const { totalVote: totalOffChainVote } = getVotesByStatus('off-chain');
-  const { totalVote: totalExecutableVote } = getVotesByStatus('executable');
-  const { totalVote: totalPastVote } = getVotesByStatus('past');
+  const { totalVote: totalActiveVote } = GetVotesByStatus('active');
+  const { totalVote: totalOffChainVote } = GetVotesByStatus('off-chain');
+  const { totalVote: totalExecutableVote } = GetVotesByStatus('executable');
+  const { totalVote: totalPastVote } = GetVotesByStatus('past');
   function goToCreateProposalPage() {
     setTimeout(() => {
       router.push(
@@ -86,42 +87,9 @@ const ProposalsPage = () => {
     },
   ];
   return (
-    <section className="mx-auto w-full max-w-[1160px] text-sm ">
-      <header
-        className={cn(
-          'mb-8 flex flex-col gap-4 rounded-lg bg-white p-5 py-6 shadow-card dark:bg-light-dark xs:p-6 ',
-          {
-            'sm:flex-row sm:items-center sm:justify-between':
-              layout !== LAYOUT_OPTIONS.RETRO,
-            'lg:flex-row lg:items-center lg:justify-between':
-              layout === LAYOUT_OPTIONS.RETRO,
-          }
-        )}
-      >
-        <div className="flex items-start gap-4 xs:items-center xs:gap-3 xl:gap-4">
-          <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-gray-100 dark:bg-dark">
-            <Image alt="Vote Pool" src={votePool} width={32} height={32} />
-          </div>
-          <div>
-            <h2 className="mb-2 text-base font-medium uppercase dark:text-gray-100 xl:text-lg">
-              You have 100 votes
-            </h2>
-            <p className="leading-relaxed text-gray-600 dark:text-gray-400">
-              You need CRIPTIC tokens to participate in governance.
-            </p>
-          </div>
-        </div>
-        <div className="shrink-0">
-          <Button
-            shape="rounded"
-            fullWidth={true}
-            className="uppercase"
-            onClick={() => goToCreateProposalPage()}
-          >
-            Create Proposal
-          </Button>
-        </div>
-      </header>
+    <section className="mx-auto w-full max-w-[1360px] text-sm ">
+      <LivePricingSlider limits={4} />
+
       <Suspense fallback={<Loader variant="blink" />}>
         <ParamTab tabMenu={tabMenuItems}>
           <TabPanel className="focus:outline-none">

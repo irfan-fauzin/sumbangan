@@ -5,32 +5,16 @@ import { motion, LayoutGroup } from 'framer-motion';
 import VoteDetailsCard from '@/components/vote/vote-details/vote-details-card';
 import { ExportIcon } from '@/components/icons/export-icon';
 
-import useSWR from 'swr';
-const url = '/api/campaign';
-const fetcher = (...args) => fetch(...args).then((res) => res.json());
+import { GetVotesByStatus } from '@/components/vote/vote-data';
 
 export default function VoteList({ voteStatus }: { voteStatus: string }) {
-  const { data, isLoading, error } = useSWR('/api/campaign', fetcher);
-
-  if (error)
-    return <div>Koneksi internet bermasalah atau Server sedang gangguan</div>;
-
-  if (isLoading)
-    return (
-      <>
-        <div className="flex justify-center pt-10">
-          <span className="loader"></span>
-        </div>
-      </>
-    );
-
-  console.log(data);
+  const { votes, totalVote } = GetVotesByStatus(voteStatus);
 
   return (
     <LayoutGroup>
       <motion.div layout initial={{ borderRadius: 16 }} className="rounded-2xl">
-        {data ? (
-          data.map((campaign: any) => (
+        {totalVote > 0 ? (
+          votes.map((campaign: any) => (
             <VoteDetailsCard key={`${campaign.id}`} vote={campaign} />
           ))
         ) : (
@@ -53,28 +37,8 @@ export default function VoteList({ voteStatus }: { voteStatus: string }) {
               </svg>
             </div>
             <h2 className="mb-3 text-base font-medium leading-relaxed dark:text-gray-100 md:text-lg xl:text-xl">
-              There are no proposals at the moment
+              There are no campaign at the moment
             </h2>
-            <p className="leading-relaxed text-gray-600 dark:text-gray-400">
-              Discuss ideas you have on{' '}
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href="https://discord.com/"
-                className="inline-flex items-center gap-1 text-gray-900 underline transition-opacity duration-200 hover:no-underline hover:opacity-90 dark:text-gray-100"
-              >
-                Discord <ExportIcon className="h-auto w-3" />
-              </a>{' '}
-              or{' '}
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href="https://www.discourse.org/"
-                className="inline-flex items-center gap-1 text-gray-900 underline transition-opacity duration-200 hover:no-underline hover:opacity-90 dark:text-gray-100"
-              >
-                Discourse <ExportIcon className="h-auto w-3" />
-              </a>
-            </p>
           </div>
         )}
       </motion.div>

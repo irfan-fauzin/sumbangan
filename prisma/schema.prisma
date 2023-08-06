@@ -37,12 +37,16 @@ model Campaign {
 }
 
 model Donate {
-  id_donate     Int         @id
-  user          Campaign?   @relation(fields: [id_donate], references: [id])
-  Amount        Int?
-  Message       String?
-  Name          String?
-  Donation_date DateTime    @default(now())
+  id_donate           Int         @id @default(autoincrement())
+  campaign            Campaign[]
+  Amount              Int?
+  Message             String?
+  Name                String?
+  tx_solana           String?
+  tx_midtrans         String?
+  Donation_date       DateTime?
+  status              Status_Payment @default(unpaid)
+  email               String?
 
 }
 
@@ -54,4 +58,9 @@ enum Role {
 enum Status {
   active
   past
+}
+
+enum Status_Payment {
+  paid
+  unpaid
 }

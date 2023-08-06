@@ -29,7 +29,7 @@ export const authOptions = {
         });
 
         // if user doesn't exist or password doesn't match
-        if (!user || !(await compare(password, user.password))) {
+        if (!user || password !== user.password) {
           throw new Error('Invalid username or password');
         }
         return user;
@@ -48,6 +48,7 @@ export const authOptions = {
       session.user.id = token.id;
       session.user.username = token.username;
       session.user.role = token.role;
+      session.user.verified = token.verified;
       session.user.fullname = token.fullname;
       session.accessToken = token.accessToken;
       return session;
@@ -57,6 +58,7 @@ export const authOptions = {
         token.id = user.id;
         token.username = user.username;
         token.role = user.role;
+        token.verified = user.verified;
         token.fullname = user.fullname;
       }
       if (account) {

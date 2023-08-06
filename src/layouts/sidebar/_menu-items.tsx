@@ -18,18 +18,61 @@ export const defaultMenuItems = [
     href: routes.home,
   },
   {
-    name: 'Profile',
-    icon: <ProfileIcon />,
-    href: routes.profile,
+    name: 'Campaign',
+    icon: <VoteIcon />,
+    href: routes.campaign,
+  },
+];
+
+export const adminMenuItems = [
+  {
+    name: 'Home',
+    icon: <HomeIcon />,
+    href: routes.home,
+  },
+  {
+    name: 'User',
+    icon: <HomeIcon />,
+    href: routes.home,
   },
   {
     name: 'Campaign',
     icon: <VoteIcon />,
     href: routes.campaign,
+    dropdownItems: [
+      {
+        name: 'Create Campaign',
+        href: routes.createNft,
+      },
+      {
+        name: 'List Campaign',
+        href: routes.campaign,
+      },
+    ],
   },
-  
 ];
 
-export const otherPagesMenuItems = [
-  
+export const campaignMenuItems = [
+  {
+    name: 'Home',
+    icon: <HomeIcon />,
+    href: routes.home,
+  },
+
+  {
+    name: 'Campaign',
+    icon: <VoteIcon />,
+    href: routes.campaign,
+    dropdownItems: [
+      {
+        name: 'Create Campaign',
+        href: routes.createNft,
+      },
+      {
+        name: 'List Campaign',
+        href: routes.campaign,
+      },
+    ],
+  },
 ];
+export const otherPagesMenuItems = [];

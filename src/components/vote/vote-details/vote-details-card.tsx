@@ -17,9 +17,11 @@ import { useLayout } from '@/lib/hooks/use-layout';
 import { LAYOUT_OPTIONS } from '@/lib/constants';
 import Image from 'next/image';
 
-import darkLogo from '@/assets/images/sedekah-subuh.png';
+export default function VoteDetailsCard({ vote }: any) {
+  const [isExpand, setIsExpand] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { layout } = useLayout();
 
-function VoteActionButton() {
   const [amount, setAmount] = useState();
 
   function checkValue(event: any) {
@@ -32,12 +34,22 @@ function VoteActionButton() {
   async function handleSubmit(event: any) {
     event.preventDefault();
 
+    setIsLoading(true);
+
     // Get data from the form.
     const data = {
       amount: parseInt(
         event.target.jumlah.value.toString().replace(/[.]/g, '')
       ),
-      order_id: event.target.pesan.value,
+      order_id:
+        event.target.title.value.substring(0, 15).replace(/\s/g, '-') +
+        '-' +
+        Date.now(),
+      id_campaign: event.target.id_campaign.value,
+      name_campaign: event.target.title.value,
+      name: event.target.nama.value,
+      email: event.target.email.value,
+      message: event.target.pesan.value,
     };
 
     // Send the data to the server in JSON format.
@@ -66,124 +78,8 @@ function VoteActionButton() {
     const result = await response.json();
 
     window.open(result.message, '_blank').focus();
+    setIsLoading(false);
   }
-
-  return (
-    <div className="mt-4 flex items-center xs:mt-6 xs:inline-flex md:mt-10">
-      <form onSubmit={handleSubmit} className="w-full max-w-lg">
-        <div className="-mx-3 mb-6 flex flex-wrap">
-          <div className="w-full px-3 md:mb-0 md:w-1/2">
-            <label
-              className="mb-2 block text-xs font-bold uppercase tracking-wide text-gray-700"
-              htmlFor="grid-first-name"
-            >
-              Nama
-            </label>
-            <input
-              className="mb-3 block w-full  appearance-none rounded border px-4 py-3 leading-tight text-gray-700 focus:bg-white focus:outline-none"
-              id="nama"
-              name="nama"
-              type="text"
-              placeholder="Opsional"
-            />
-          </div>
-          <div className="w-full px-3 md:w-1/2">
-            <label
-              className="mb-2 block text-xs font-bold uppercase tracking-wide text-gray-700"
-              htmlFor="grid-last-email"
-            >
-              Email
-            </label>
-            <input
-              className="mb-3 block w-full  appearance-none rounded border px-4 py-3 leading-tight text-gray-700 focus:bg-white focus:outline-none"
-              id="email"
-              name="email"
-              type="email"
-              placeholder="Opsional"
-            />
-          </div>
-        </div>
-        <div className="-mx-3 mb-6 flex flex-wrap">
-          <div className="w-full px-3">
-            <label
-              className="mb-2 block text-xs font-bold uppercase tracking-wide text-gray-700"
-              htmlFor="grid-password"
-            >
-              Pesan
-            </label>
-            <input
-              className="mb-3 block w-full appearance-none rounded border border-gray-200 bg-gray-200 px-4 py-3 leading-tight text-gray-700 focus:border-gray-500 focus:bg-white focus:outline-none"
-              id="pesan"
-              name="pesan"
-              type="text"
-              placeholder="Opsional"
-            />
-          </div>
-        </div>
-        <div className="-mx-3 mb-6 flex flex-wrap ">
-          <div className="w-full px-3">
-            <label
-              className="mb-2 block text-xs font-bold uppercase tracking-wide text-gray-700"
-              htmlFor="grid-password"
-            >
-              Jumlah Donasi
-            </label>
-            <div className="mb-6 flex items-center text-lg md:mb-8">
-              <div className="absolute p-3 text-lg tracking-tighter text-gray-900 outline-none transition-all placeholder:text-gray-600 focus:border-gray-900  dark:border-gray-600 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-gray-500 ">
-                Rp.
-              </div>
-              <input
-                value={amount}
-                onChange={checkValue}
-                type="text"
-                id="jumlah"
-                name="jumlah"
-                className="h-12 w-full appearance-none rounded-lg border-2 border-gray-200 bg-transparent py-2 text-lg tracking-tighter text-gray-900 outline-none transition-all placeholder:text-gray-600 focus:border-gray-900 ltr:pl-11 ltr:pr-5 rtl:pr-10 dark:border-gray-600 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-gray-500"
-                placeholder="0"
-              />
-            </div>
-          </div>
-        </div>
-        <div className="-mx-3 flex flex-wrap">
-          <div className="w-full px-3">
-            <Button type="submit" className="h-12 w-full">
-              Donasi
-            </Button>
-          </div>
-        </div>
-      </form>
-
-      {/* 
-     <form
-      className="relative flex w-full rounded-full lg:basis-72 "
-      noValidate
-  
-    >
-      <label className="flex items-center">
-        <input
-          defaultValue={5000}
-          min={5000}
-          value={amount}
-          className="h-12 w-60 mr-4 appearance-none rounded-lg border-2 border-gray-200 bg-transparent py-1 text-lg tracking-tighter text-gray-900 outline-none transition-all placeholder:text-gray-600 focus:border-gray-900 ltr:pl-10 ltr:pr-5 rtl:pr-10 dark:border-gray-600 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-gray-500"
-          onChange={checkValue}
-          autoComplete="off"
-        />
-        <span className="pointer-events-none absolute flex h-full w-8 cursor-pointer items-center justify-center text-gray-600 hover:text-gray-900 ltr:left-0 ltr:pl-2 rtl:right-0 rtl:pr-2 dark:text-gray-500 sm:ltr:pl-3 sm:rtl:pr-3">
-          Rp
-        </span>
-      </label>
-      <Button shape="rounded" color="success" className="h-12 flex-1">
-        Donasi
-      </Button>
-    </form> */}
-    </div>
-  );
-}
-
-// FIXME: need to add vote type
-export default function VoteDetailsCard({ vote }: any) {
-  const [isExpand, setIsExpand] = useState(false);
-  const { layout } = useLayout();
 
   return (
     <motion.div
@@ -212,10 +108,12 @@ export default function VoteDetailsCard({ vote }: any) {
           {/* show only when vote is active */}
           {vote.Status === 'active' && (
             <>
-              <h3 className="mb-4 text-sm text-gray-400  md:text-sm md:text-gray-900 dark:md:text-gray-100 lg:text-sm ">
-                Berakhir dalam :
-              </h3>
-              <AuctionCountdown date={vote.Date_end} />
+              <div className={cn(isExpand ? 'hidden' : '')}>
+                <h3 className="mb-4 text-sm text-gray-400  md:text-sm md:text-gray-900 dark:md:text-gray-100 lg:text-sm ">
+                  Berakhir dalam :
+                </h3>
+                <AuctionCountdown date={vote.Date_end} />
+              </div>
             </>
           )}
 
@@ -229,13 +127,117 @@ export default function VoteDetailsCard({ vote }: any) {
               {!isExpand ? (
                 <Button
                   onClick={() => setIsExpand(!isExpand)}
-                  className="mt-4 w-full xs:mt-6 xs:w-auto md:mt-10"
+                  className="mt-4 w-full hover:bg-green-500 xs:mt-6 xs:w-auto md:mt-10"
                   shape="rounded"
                 >
                   Donasi
                 </Button>
               ) : (
-                <VoteActionButton />
+                <div className="mt-4 flex items-center xs:mt-6 xs:inline-flex md:mt-10">
+                  <form onSubmit={handleSubmit} className="w-full max-w-lg">
+                    <div className="-mx-3 mb-6 flex flex-wrap">
+                      <div className="w-full px-3 md:mb-0 md:w-1/2">
+                        <input
+                          className="border-1 text-md h-12 w-full appearance-none rounded-lg border-gray-200 bg-transparent py-2 tracking-tighter text-gray-900 outline-none transition-all placeholder:text-gray-600 focus:border-gray-900 dark:border-gray-600 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-gray-500"
+                          id="nama"
+                          name="nama"
+                          type="text"
+                          placeholder="Nama"
+                        />
+                      </div>
+                      <div className="w-full px-3 md:w-1/2">
+                        <input
+                          className="border-1 text-md h-12 w-full appearance-none rounded-lg border-gray-200 bg-transparent py-2 tracking-tighter text-gray-900 outline-none transition-all placeholder:text-gray-600 focus:border-gray-900 dark:border-gray-600 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-gray-500"
+                          id="email"
+                          name="email"
+                          type="email"
+                          placeholder="Email"
+                        />
+                      </div>
+                    </div>
+                    <div className="-mx-3 mb-6 flex flex-wrap">
+                      <div className="w-full px-3">
+                        <input
+                          className="border-1 text-md h-12 w-full appearance-none rounded-lg border-gray-200 bg-transparent py-2 tracking-tighter text-gray-900 outline-none transition-all placeholder:text-gray-600 focus:border-gray-900 dark:border-gray-600 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-gray-500"
+                          id="pesan"
+                          name="pesan"
+                          type="text"
+                          placeholder="Pesan"
+                        />
+                      </div>
+                    </div>
+                    <div className="-mx-3 mb-6 flex flex-wrap ">
+                      <div className="w-full px-3">
+                        <div className="mb-6 flex items-center text-lg md:mb-8">
+                          <div className="absolute p-3 text-lg tracking-tighter text-gray-900 outline-none transition-all placeholder:text-gray-600 focus:border-gray-900  dark:border-gray-600 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-gray-500 ">
+                            Rp.
+                          </div>
+                          <input
+                            value={amount}
+                            onChange={checkValue}
+                            type="text"
+                            id="jumlah"
+                            name="jumlah"
+                            className="border-1 text-md h-12 w-full appearance-none rounded-lg border-gray-200 bg-transparent py-2 tracking-tighter text-gray-900 outline-none transition-all placeholder:text-gray-600 focus:border-gray-900 ltr:pl-11 ltr:pr-5 rtl:pr-10 dark:border-gray-600 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-gray-500"
+                            placeholder="Jumlah Donasi (required)"
+                            required
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <input
+                      value={vote.Title}
+                      type="text"
+                      id="title"
+                      name="title"
+                      className="hidden "
+                    />
+
+                    <input
+                      value={vote.id}
+                      type="text"
+                      id="id_campaign"
+                      name="id_campaign"
+                      className="hidden "
+                    />
+                    <div className="-mx-3 flex flex-wrap">
+                      <div className="w-full px-3">
+                        <Button
+                          type="submit"
+                          disabled={isLoading}
+                          className="h-12 w-full hover:bg-green-500"
+                        >
+                          {isLoading ? 'Tunggu Sebentar' : 'Donasi'}
+                        </Button>
+                      </div>
+                    </div>
+                  </form>
+
+                  {/* 
+               <form
+                className="relative flex w-full rounded-full lg:basis-72 "
+                noValidate
+            
+              >
+                <label className="flex items-center">
+                  <input
+                    defaultValue={5000}
+                    min={5000}
+                    value={amount}
+                    className="h-12 w-60 mr-4 appearance-none rounded-lg border-1 border-gray-200 bg-transparent py-1 text-lg tracking-tighter text-gray-900 outline-none transition-all placeholder:text-gray-600 focus:border-gray-900 ltr:pl-10 ltr:pr-5 rtl:pr-10 dark:border-gray-600 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-gray-500"
+                    onChange={checkValue}
+                    autoComplete="off"
+                  />
+                  <span className="pointer-events-none absolute flex h-full w-8 cursor-pointer items-center justify-center text-gray-600 hover:text-gray-900 ltr:left-0 ltr:pl-2 rtl:right-0 rtl:pr-2 dark:text-gray-500 sm:ltr:pl-3 sm:rtl:pr-3">
+                    Rp
+                  </span>
+                </label>
+                <Button shape="rounded" color="success" className="h-12 flex-1">
+                  Donasi
+                </Button>
+              </form> */}
+                </div>
               )}
             </>
           )}
@@ -253,7 +255,7 @@ export default function VoteDetailsCard({ vote }: any) {
         {['active', 'off-chain'].indexOf(vote.Status) !== -1 && (
           <div
             className={cn(
-              "before:content-[' '] relative grid h-full gap-2 before:absolute before:bottom-0 before:border-b before:border-r before:border-dashed before:border-gray-200 ltr:before:left-0 rtl:before:right-0 dark:border-gray-700 dark:before:border-gray-700 xs:gap-2.5 ",
+              "before:content-[' '] relative grid h-full content-center gap-2 before:absolute before:bottom-0 before:border-b before:border-r before:border-dashed before:border-gray-200 ltr:before:left-0 rtl:before:right-0 dark:border-gray-700 dark:before:border-gray-700 xs:gap-2.5 ",
               {
                 'mb-5 pb-5 before:h-[1px] before:w-full md:mb-0 md:pb-0 md:before:h-full md:before:w-[1px] ltr:md:pl-5 rtl:md:pr-5 ltr:xl:pl-3 rtl:xl:pr-3':
                   layout !== LAYOUT_OPTIONS.RETRO,
@@ -263,11 +265,11 @@ export default function VoteDetailsCard({ vote }: any) {
             )}
           >
             <Image
-              className="mx-auto cursor-pointer"
+              className="mx-auto cursor-pointer rounded-md"
               onClick={() => setIsExpand(!isExpand)}
               alt="desc"
-              width={640}
-              height={600}
+              width={480}
+              height={300}
               src={
                 'https://res.cloudinary.com/dg9jmbmg6/image/upload/f_auto,q_auto/v1/sumbangan/' +
                 vote.Image
@@ -332,9 +334,10 @@ export default function VoteDetailsCard({ vote }: any) {
             </div>
             <VotePoll data={vote} />
 
-            <VoterTable votes={vote?.donate} />
+            <VoterTable votes={vote.donate} />
+
             <RevealContent defaultHeight={250}>
-              <h4 className="mb-6 uppercase dark:text-gray-100">Description</h4>
+              <h4 className="mb-6 uppercase dark:text-gray-100">Cerita</h4>
               <div
                 className="dynamic-html grid gap-2 leading-relaxed text-gray-600 dark:text-gray-400"
                 dangerouslySetInnerHTML={{ __html: vote.Description }}

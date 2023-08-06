@@ -14,6 +14,7 @@ import ModernLayout from '@/layouts/modern/layout';
 import MinimalLayout from '@/layouts/minimal/layout';
 import RetroLayout from '@/layouts/retro/layout';
 import ClassicLayout from '@/layouts/classic/layout';
+import { ExportIcon } from '@/components/icons/export-icon';
 
 import Lottie from 'lottie-react';
 
@@ -59,13 +60,55 @@ const NotFoundPage = () => {
         </div>
 
         <h2 className="mb-2 mt-5 text-base font-medium uppercase tracking-wide text-gray-900 dark:text-white sm:mb-4 sm:mt-10 sm:text-xl 3xl:mt-12 3xl:text-2xl">
-          Error! No Result Found
+          Terima kasih ❤️
         </h2>
         <p className="mb-4 max-w-full text-xs leading-loose tracking-tight text-gray-600 dark:text-gray-400 sm:mb-6 sm:w-[430px] sm:text-sm sm:leading-loose">
-          Sorry, the page you are looking for might be renamed, removed, or
-          might never exist.
+          Donasi anda telah tercatat di Solana Blockchain
         </p>
+
+        <div className="grid grid-cols-3 justify-start gap-4 border-y border-dashed border-gray-200 py-5 text-left  dark:border-gray-700 ">
+          <div className="...">
+            <div className="font-bold	tracking-tighter text-gray-900 dark:text-white">
+              ID Transaksi
+            </div>
+            <div className="font-bold	tracking-tighter text-gray-900 dark:text-white">
+              Campaign
+            </div>
+            <div className="font-bold	tracking-tighter text-gray-900 dark:text-white">
+              Donatur
+            </div>
+            <div className="font-bold	tracking-tighter text-gray-900 dark:text-white">
+              Jumlah
+            </div>
+            <div className="font-bold	tracking-tighter text-gray-900 dark:text-white">
+              Pesan
+            </div>
+            <div className="font-bold	tracking-tighter text-gray-900 dark:text-white">
+              Waktu
+            </div>
+          </div>
+          <div className="... col-span-2">
+            <div className="truncate">
+              <a
+                href="https://solscan.io/tx/2S95Qv6E3JBeX6nXgoaVuMaLtySAzLg15PxxUAqyX692aA2cH4quQb9hrZp3o6FmJZ43XBEuhGXKaWZ7KC3pDuqF"
+                className="inline-flex font-medium text-gray-900 hover:underline hover:opacity-90 focus:underline focus:opacity-90 dark:text-gray-100"
+              >
+                2S95Qv6E3JBeX6nXgoaVuMaLtySAzLg15PxxUAqyX692aA2cH4quQb9h....
+                <ExportIcon className="h-auto w-3" />
+              </a>
+            </div>
+            <div className="truncate">
+              Berbagi Kasih dengan Sedekah Makan untuk Yatim dhuafa
+            </div>
+            <div>09</div>
+            <div>09</div>
+            <div>09</div>
+            <div>09</div>
+          </div>
+        </div>
+
         <AnchorLink
+          className="mt-6"
           href={{
             pathname:
               layout === LAYOUT_OPTIONS.MODERN ? '/' : routes.home + layout,

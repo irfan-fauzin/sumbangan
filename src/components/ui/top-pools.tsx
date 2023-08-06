@@ -20,9 +20,9 @@ export default function TopPools({ limit }: TopPoolsProps) {
         }
       )}
     >
-      <h3 className="mb-6 text-base font-medium uppercase">Top Criptic</h3>
+      <h3 className="mb-6 text-base font-medium uppercase">Top Campaigners</h3>
       <div className="mb-5 flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
-        <span className="col-span-2">Pool</span>
+        <span className="col-span-2">Nama</span>
         <span>Volume</span>
       </div>
 

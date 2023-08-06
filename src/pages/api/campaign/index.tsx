@@ -80,7 +80,11 @@ export default async function Usehandle(
       const result = await prisma.campaign.findMany({
         include: {
           user: true,
-          donate: true,
+          donate: {
+            where: {
+              status: 'paid',
+            },
+          },
         },
       });
       return res.json(result);

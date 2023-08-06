@@ -33,10 +33,10 @@ export default function VolumeChart() {
   return (
     <div className="rounded-lg bg-white p-6 shadow-card dark:bg-light-dark sm:p-8">
       <h3 className="mb-1.5 text-sm uppercase tracking-wider text-gray-600 dark:text-gray-400 sm:mb-2 sm:text-base">
-        Volume 24h
+        Jumlah Donasi Per Hari
       </h3>
       <div className="mb-1 text-base font-medium text-gray-900 dark:text-white sm:text-xl">
-        {dailyVolume}
+        {dailyVolume} Donasi
       </div>
       <div className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">
         {formattedDate}

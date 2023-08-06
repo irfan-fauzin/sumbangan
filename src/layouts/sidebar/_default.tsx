@@ -10,6 +10,8 @@ import { useDrawer } from '@/components/drawer-views/context';
 import { Close } from '@/components/icons/close';
 import {
   defaultMenuItems,
+  adminMenuItems,
+  campaignMenuItems,
   otherPagesMenuItems,
 } from '@/layouts/sidebar/_menu-items';
 import { LAYOUT_OPTIONS } from '@/lib/constants';
@@ -17,19 +19,33 @@ import { LAYOUT_OPTIONS } from '@/lib/constants';
 import AuthorImage from '@/assets/images/author.jpg';
 import React from 'react';
 
+import { signIn, signOut, useSession } from 'next-auth/react';
+
 interface SidebarProps {
   className?: string;
   layoutOption?: string;
-  menuItems?: any[];
 }
 
 export default function Sidebar({
   className,
   layoutOption = '',
-  menuItems = defaultMenuItems,
 }: SidebarProps) {
+  const { data: session } = useSession();
+  let Menus;
+
+  switch (session?.user.role) {
+    case 'ADMIN':
+      Menus = adminMenuItems;
+      break;
+    case 'CAMPAIGN_MANAGER':
+      Menus = campaignMenuItems;
+      break;
+    default:
+      Menus = defaultMenuItems;
+  }
+
   const { closeDrawer } = useDrawer();
-  const sideBarMenus = menuItems?.map((item) => ({
+  const sideBarMenus = Menus?.map((item) => ({
     name: item.name,
     icon: item.icon,
     href:
@@ -53,7 +69,7 @@ export default function Sidebar({
         className
       )}
     >
-      <div className="relative flex h-24 items-center justify-between overflow-hidden px-6 py-4 2xl:px-8">
+      <div className="relative flex h-24 items-center justify-center overflow-hidden px-6 py-4 2xl:px-8">
         <Logo />
         <div className="md:hidden">
           <Button
@@ -69,14 +85,8 @@ export default function Sidebar({
         </div>
       </div>
 
-      <div className="custom-scrollbar h-[calc(100%-98px)] overflow-hidden overflow-y-auto">
-        <div className="px-6 pb-5 2xl:px-8">
-          <AuthorCard
-            image={AuthorImage}
-            name="Cameron Williamson"
-            role="admin"
-          />
-
+      <div className="custom-scrollbar grid h-[calc(100%-98px)] content-between">
+        <div className="px-6 pb-5 2xl:px-8 ">
           <div className="mt-12">
             {sideBarMenus?.map((item, index) => (
               <MenuItem
@@ -98,6 +108,21 @@ export default function Sidebar({
             ))}
           </div>
         </div>
+        {session ? (
+          <div className="px-6 pb-5 2xl:px-8 ">
+            <div className="mb-8">
+              <AuthorCard
+                image={AuthorImage}
+                name={session?.user?.fullname}
+                role={
+                  session?.user?.role === 'ADMIN' ? 'Admin' : 'Campaign Manager'
+                }
+              />
+            </div>
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
     </aside>
   );
