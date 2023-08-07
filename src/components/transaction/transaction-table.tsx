@@ -13,19 +13,18 @@ import { LongArrowRight } from '@/components/icons/long-arrow-right';
 import { LongArrowLeft } from '@/components/icons/long-arrow-left';
 import { LinkIcon } from '@/components/icons/link-icon';
 import useSWR from 'swr';
+import moment from 'moment-timezone';
 
 function formatDate(string) {
-  var options = {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    timeZone: 'Asia/Jakarta',
-    timeZoneName: 'short',
-  };
-  return new Date(string).toLocaleDateString('id-ID', options);
+  var m = moment(string);
+  var str = moment(m).format('DD-MM-YYYY HH:mm:ss ZZ');
+
+  return moment
+    .tz(str, 'Asia/Jakarta')
+    .subtract(1, 'days')
+    .add(10, 'hours')
+    .add(1, 'months')
+    .format('LLL');
 }
 
 const COLUMNS = [
@@ -64,14 +63,14 @@ const COLUMNS = [
     accessor: 'payment_method',
     // @ts-ignore
     Cell: ({ cell: { value } }) => (
-      <div className="ltr:text-right rtl:text-left">{value}</div>
+      <div className="flex items-center justify-start">{value}</div>
     ),
     minWidth: 100,
     maxWidth: 180,
   },
   {
     Header: () => (
-      <div className="ltr:mr-auto rtl:mr-auto">Transaksi Solana</div>
+      <div className="ltr:mr-auto rtl:mr-auto">Solana Transaction</div>
     ),
     accessor: 'tx_solana',
     // @ts-ignore
@@ -81,19 +80,19 @@ const COLUMNS = [
         <a href={`https://solscan.io/tx/` + value}>Link</a>
       </div>
     ),
-    minWidth: 220,
-    maxWidth: 280,
+    minWidth: 200,
+    maxWidth: 200,
   },
 
   {
-    Header: () => <div className="ltr:ml-auto rtl:mr-auto">Date</div>,
+    Header: () => <div className="ltr:mr-auto rtl:ml-auto">Date</div>,
     accessor: 'Donation_date',
     // @ts-ignore
     Cell: ({ cell: { value } }) => (
-      <div className="ltr:text-right rtl:text-left">{formatDate(value)}</div>
+      <div className="flex items-center justify-start">{formatDate(value)}</div>
     ),
-    minWidth: 280,
-    maxWidth: 300,
+    minWidth: 250,
+    maxWidth: 250,
   },
 ];
 
@@ -123,7 +122,7 @@ export default function TransactionTable() {
     {
       columns,
       data,
-      initialState: { pageSize: 5 },
+      initialState: { pageSize: 10 },
     },
     useSortBy,
     useResizeColumns,

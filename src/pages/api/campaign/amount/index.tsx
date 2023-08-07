@@ -2,7 +2,6 @@
 
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Prisma, PrismaClient } from '@prisma/client';
-import { campaignMenuItems } from '@/layouts/sidebar/_menu-items';
 
 const prisma = new PrismaClient();
 
