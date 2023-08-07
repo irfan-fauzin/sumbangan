@@ -1,8 +1,4 @@
-// @ts-nocheck
-
-'use client';
-
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   useTable,
   useResizeColumns,
@@ -19,18 +15,20 @@ import { LinkIcon } from '@/components/icons/link-icon';
 import useSWR from 'swr';
 
 function formatDate(string) {
-  var options = {year: 'numeric', month: '2-digit', day: '2-digit',
-  hour: '2-digit', minute: '2-digit', second: '2-digit',
-  timeZone: 'Asia/Jakarta',
-  timeZoneName: 'short'};
+  var options = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    timeZone: 'Asia/Jakarta',
+    timeZoneName: 'short',
+  };
   return new Date(string).toLocaleDateString('id-ID', options);
 }
 
-
-const COLUMNS = React.useMemo(
-  () => [
-
-
+const COLUMNS = [
   {
     Header: () => <div className="ltr:mr-auto rtl:ml-auto">Donatur</div>,
     accessor: 'Name',
@@ -49,23 +47,18 @@ const COLUMNS = React.useMemo(
     Cell: ({ cell: { value } }) => (
       <div className="-tracking-[1px] ltr:text-right rtl:text-left">
         <strong className="mb-0.5 flex justify-start  md:mb-1.5  ">
-        Rp.{' '}
-              {String(value)
-                .replace(/\D/g, '')
-                .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
-          <span className="inline-block ltr:ml-1.5 rtl:mr-1.5 md:ltr:ml-2 md:rtl:mr-2">
-            
-          </span>
+          Rp.{' '}
+          {String(value)
+            .replace(/\D/g, '')
+            .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+          <span className="inline-block ltr:ml-1.5 rtl:mr-1.5 md:ltr:ml-2 md:rtl:mr-2"></span>
         </strong>
-       
       </div>
     ),
     minWidth: 100,
     maxWidth: 150,
   },
 
- 
-  
   {
     Header: () => <div className="ltr:mr-auto rtl:ml-auto">Payment</div>,
     accessor: 'payment_method',
@@ -77,18 +70,20 @@ const COLUMNS = React.useMemo(
     maxWidth: 180,
   },
   {
-    Header: () => <div className="ltr:mr-auto rtl:mr-auto">Transaksi Solana</div>,
+    Header: () => (
+      <div className="ltr:mr-auto rtl:mr-auto">Transaksi Solana</div>
+    ),
     accessor: 'tx_solana',
     // @ts-ignore
     Cell: ({ cell: { value } }) => (
       <div className="flex items-center justify-start">
-        <LinkIcon className="h-[18px] w-[18px] ltr:mr-2 rtl:ml-2" /> <a href={`https://solscan.io/tx/`+value}>Link</a>
+        <LinkIcon className="h-[18px] w-[18px] ltr:mr-2 rtl:ml-2" />{' '}
+        <a href={`https://solscan.io/tx/` + value}>Link</a>
       </div>
     ),
     minWidth: 220,
     maxWidth: 280,
   },
- 
 
   {
     Header: () => <div className="ltr:ml-auto rtl:mr-auto">Date</div>,
@@ -100,21 +95,18 @@ const COLUMNS = React.useMemo(
     minWidth: 280,
     maxWidth: 300,
   },
-],
-[]
-);
+];
 
 export default function TransactionTable() {
   const fetcher = (...args) => fetch(...args).then((res) => res.json());
-    const { data, error, isLoading } = useSWR("/api/campaign/donate", fetcher);
+  const { data, error, isLoading } = useSWR('/api/campaign/donate', fetcher);
 
-    if (error) return <div>Failed to fetch users.</div>;
-    if (isLoading) return <h2>Loading...</h2>;
+  if (error) return <div>Failed to fetch users.</div>;
+  if (isLoading) return <h2>Loading...</h2>;
 
+  const columns = COLUMNS;
 
- 
-
-
+  // @ts-ignore
   const {
     getTableProps,
     getTableBodyProps,
@@ -129,8 +121,7 @@ export default function TransactionTable() {
     prepareRow,
   } = useTable(
     {
-     
-      COLUMNS,
+      columns,
       data,
       initialState: { pageSize: 5 },
     },
