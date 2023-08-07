@@ -16,15 +16,12 @@ import useSWR from 'swr';
 import moment from 'moment-timezone';
 
 function formatDate(string) {
-  var m = moment(string);
-  var str = moment(m).format('DD-MM-YYYY HH:mm:ss ZZ');
+  return moment(string).locale('id').subtract(7, 'hours').format('LLL');
 
-  return moment
-    .tz(str, 'Asia/Jakarta')
-    .subtract(1, 'days')
-    .add(10, 'hours')
-    .add(1, 'months')
-    .format('LLL');
+  // var m = moment(string).locale("id")
+  // var str = moment(m).format('DD-MM-YYYY HH:mm:ss ZZ');
+
+  // return moment.tz(str, 'Asia/Jakarta').subtract(1,"days").add(2,"hours").add(1, "months").format('LLL');
 }
 
 const COLUMNS = [
