@@ -6,6 +6,7 @@ import Button from '@/components/ui/button';
 import { LongArrowRight } from '@/components/icons/long-arrow-right';
 import { LongArrowLeft } from '@/components/icons/long-arrow-left';
 import { ExportIcon } from '@/components/icons/export-icon';
+import moment from 'moment-timezone';
 
 const rupiah = (number: any) => {
   return new Intl.NumberFormat('id-ID', {
@@ -14,6 +15,10 @@ const rupiah = (number: any) => {
     minimumFractionDigits: 0,
   }).format(number);
 };
+
+function formatDate(string) {
+  return moment(string).locale('id').subtract(7, 'hours').format('LLL');
+}
 
 const COLUMNS = [
   {
@@ -63,6 +68,12 @@ const COLUMNS = [
       </a>
     ),
   },
+  {
+    Header: 'Tanggal',
+    accessor: 'Donation_date',
+    // @ts-ignore
+    Cell: ({ cell: { value } }) => formatDate(value),
+  },
 ];
 
 interface VoterTableTypes {
@@ -79,6 +90,7 @@ interface VoterTableTypes {
 export default function VoterTable({ votes }: VoterTableTypes) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const data = useMemo(() => votes, []);
+  data.sort((a, b) => (a.Donation_date < b.Donation_date ? 1 : -1));
   const columns = useMemo(() => COLUMNS, []);
   const {
     getTableProps,
@@ -101,6 +113,7 @@ export default function VoterTable({ votes }: VoterTableTypes) {
     },
     usePagination
   );
+
   let { pageIndex } = state;
   useEffect(() => {
     setPageSize(10);

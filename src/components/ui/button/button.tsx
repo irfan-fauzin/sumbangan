@@ -129,14 +129,14 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           'relative inline-flex shrink-0 items-center justify-center overflow-hidden text-center text-xs font-medium tracking-wider outline-none transition-all sm:text-sm',
           !disabled
             ? buttonColorClassNames
-            : 'dark:text-dark-400 cursor-not-allowed bg-gray-100 text-gray-400',
+            : 'dark:text-dark-400 cursor-not-allowed  text-gray-400',
           disabled || isLoading || variant === 'transparent'
             ? ''
             : 'hover:-translate-y-0.5 hover:shadow-large focus:-translate-y-0.5 focus:shadow-large focus:outline-none',
           isLoading && 'pointer-events-auto cursor-default focus:outline-none',
           fullWidth && 'w-full',
           color === 'white' || color === 'gray'
-            ? 'text-gray-900 dark:text-white'
+            ? 'text-white-300 dark:text-dark-400'
             : variants[variant],
           shapes[shape],
           shape === 'circle' ? `${sizeClassNames[1]}` : `${sizeClassNames[0]}`,

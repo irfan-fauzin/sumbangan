@@ -135,17 +135,17 @@ export default function VoteDetailsCard({ vote }: any) {
               ) : (
                 <div className="mt-4 flex items-center xs:mt-6 xs:inline-flex md:mt-10">
                   <form onSubmit={handleSubmit} className="w-full max-w-lg">
-                    <div className="-mx-3 mb-6 flex flex-wrap">
-                      <div className="w-full px-3 md:mb-0 md:w-1/2">
+                    <div className="-mx-3  flex flex-wrap">
+                      <div className="w-full px-3   md:w-1/2">
                         <input
-                          className="border-1 text-md h-12 w-full appearance-none rounded-lg border-gray-200 bg-transparent py-2 tracking-tighter text-gray-900 outline-none transition-all placeholder:text-gray-600 focus:border-gray-900 dark:border-gray-600 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-gray-500 xs:mb-6"
+                          className="border-1 text-md h-12 w-full appearance-none rounded-lg border-gray-200 bg-transparent py-2 tracking-tighter text-gray-900 outline-none transition-all placeholder:text-gray-600 focus:border-gray-900 dark:border-gray-600 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-gray-500 "
                           id="nama"
                           name="nama"
                           type="text"
                           placeholder="Nama"
                         />
                       </div>
-                      <div className="w-full px-3 md:w-1/2">
+                      <div className="mt-3 w-full px-3 sm:mt-0 md:mt-0 md:w-1/2 lg:mt-0">
                         <input
                           className="border-1 text-md h-12 w-full appearance-none rounded-lg border-gray-200 bg-transparent py-2 tracking-tighter text-gray-900 outline-none transition-all placeholder:text-gray-600 focus:border-gray-900 dark:border-gray-600 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-gray-500"
                           id="email"
@@ -155,7 +155,7 @@ export default function VoteDetailsCard({ vote }: any) {
                         />
                       </div>
                     </div>
-                    <div className="-mx-3 mb-6 flex flex-wrap">
+                    <div className="-mx-3 mb-4 mt-3 flex flex-wrap lg:mt-3">
                       <div className="w-full px-3">
                         <input
                           className="border-1 text-md h-12 w-full appearance-none rounded-lg border-gray-200 bg-transparent py-2 tracking-tighter text-gray-900 outline-none transition-all placeholder:text-gray-600 focus:border-gray-900 dark:border-gray-600 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-gray-500"
@@ -166,9 +166,9 @@ export default function VoteDetailsCard({ vote }: any) {
                         />
                       </div>
                     </div>
-                    <div className="-mx-3 mb-6 flex flex-wrap ">
+                    <div className="-mx-3 mb-3 flex flex-wrap ">
                       <div className="w-full px-3">
-                        <div className="mb-6 flex items-center text-lg md:mb-8">
+                        <div className="mb-3 flex items-center text-lg md:mb-8">
                           <div className="absolute p-3 text-lg tracking-tighter text-gray-900 outline-none transition-all placeholder:text-gray-600 focus:border-gray-900  dark:border-gray-600 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-gray-500 ">
                             Rp.
                           </div>

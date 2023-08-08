@@ -8,7 +8,7 @@ export default async function Usehandle(
   res: NextApiResponse
 ) {
   const query = req.query;
-  const { id, limit } = query;
+  const { id, campaigner } = query;
   switch (req.method) {
     case 'GET': {
       if (id) {
