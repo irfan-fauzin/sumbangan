@@ -1,0 +1,97 @@
+{
+    "version": "0.1.0",
+    "name": "sumbangan",
+    "instructions": [
+        {
+            "name": "donate",
+            "accounts": [
+                {
+                    "name": "donateAccount",
+                    "isMut": true,
+                    "isSigner": true
+                },
+                {
+                    "name": "signer",
+                    "isMut": true,
+                    "isSigner": true
+                },
+                {
+                    "name": "systemProgram",
+                    "isMut": false,
+                    "isSigner": false
+                }
+            ],
+            "args": [
+                {
+                    "name": "campaign",
+                    "type": "string"
+                },
+                {
+                    "name": "donatur",
+                    "type": "string"
+                },
+                {
+                    "name": "amount",
+                    "type": "string"
+                },
+                {
+                    "name": "midtransPaymentId",
+                    "type": "string"
+                },
+                {
+                    "name": "notes",
+                    "type": "string"
+                },
+                {
+                    "name": "date",
+                    "type": "string"
+                },
+                {
+                    "name": "paymentMethod",
+                    "type": "string"
+                }
+            ]
+        }
+    ],
+    "accounts": [
+        {
+            "name": "DonateAccount",
+            "type": {
+                "kind": "struct",
+                "fields": [
+                    {
+                        "name": "campaign",
+                        "type": "string"
+                    },
+                    {
+                        "name": "donatur",
+                        "type": "string"
+                    },
+                    {
+                        "name": "amount",
+                        "type": "string"
+                    },
+                    {
+                        "name": "midtransPaymentId",
+                        "type": "string"
+                    },
+                    {
+                        "name": "paymentMethod",
+                        "type": "string"
+                    },
+                    {
+                        "name": "notes",
+                        "type": "string"
+                    },
+                    {
+                        "name": "date",
+                        "type": "string"
+                    }
+                ]
+            }
+        }
+    ],
+    "metadata": {
+        "address": "5oHv28d6bup84dHF4ARf7ZzsbdLhcJmg8iPGzhcnQayM"
+    }
+}

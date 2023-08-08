@@ -138,7 +138,7 @@ export default function VoteDetailsCard({ vote }: any) {
                     <div className="-mx-3 mb-6 flex flex-wrap">
                       <div className="w-full px-3 md:mb-0 md:w-1/2">
                         <input
-                          className="border-1 text-md mb-6 h-12 w-full appearance-none rounded-lg border-gray-200 bg-transparent py-2 tracking-tighter text-gray-900 outline-none transition-all placeholder:text-gray-600 focus:border-gray-900 dark:border-gray-600 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-gray-500"
+                          className="border-1 text-md h-12 w-full appearance-none rounded-lg border-gray-200 bg-transparent py-2 tracking-tighter text-gray-900 outline-none transition-all placeholder:text-gray-600 focus:border-gray-900 dark:border-gray-600 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-gray-500 xs:mb-6"
                           id="nama"
                           name="nama"
                           type="text"
