@@ -47,7 +47,7 @@ export default function ModernScreen() {
         <VolumeChart />
       </div>
 
-      <div className="flex flex-wrap">
+      <div className="mt-6 flex flex-wrap">
         <div
           className={cn(
             'w-full lg:w-[calc(100%-288px)] ltr:lg:pr-6 rtl:lg:pl-6 2xl:w-[calc(100%-320px)] 3xl:w-[calc(100%-358px)]'

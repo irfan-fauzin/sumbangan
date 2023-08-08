@@ -77,7 +77,7 @@ export default function VoteDetailsCard({ vote }: any) {
     // Get the response data from server as JSON.
     // If server returns the name submitted, that means the form works.
     const result = await response.json();
-    await router.push('/success/?order_id=' + data.order_id);
+    await router.push('/payment/?order_id=' + data.order_id);
     await window.open(result.message);
     setIsLoading(false);
   }

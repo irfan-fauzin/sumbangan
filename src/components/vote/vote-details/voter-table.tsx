@@ -24,16 +24,6 @@ const COLUMNS = [
   {
     Header: 'Donatur',
     accessor: 'Name',
-    // @ts-ignore
-    Cell: ({ cell: { value } }) => (
-      <a
-        href={'/'}
-        className="inline-flex items-center gap-2 hover:underline hover:opacity-90 focus:underline focus:opacity-90"
-      >
-        {value}
-        <ExportIcon className="h-auto w-3" />
-      </a>
-    ),
   },
   {
     Header: 'Jumlah',

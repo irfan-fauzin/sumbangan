@@ -8,7 +8,7 @@ export default async function Usehandle(
   res: NextApiResponse
 ) {
   const query = req.query;
-  const { id, limit } = query;
+  const { username } = query;
   switch (req.method) {
     case 'GET': {
       const test = await prisma.donate.aggregate({
@@ -16,7 +16,7 @@ export default async function Usehandle(
           status: 'paid',
           campaign: {
             every: {
-              user: { username: 'irfan' },
+              user: { username: username },
             },
           },
         },
