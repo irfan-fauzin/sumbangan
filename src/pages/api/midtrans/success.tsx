@@ -49,7 +49,7 @@ export default async function Usehandle(
 
   switch (req.method) {
     case 'POST': {
-      if (transaction_status === 'capture') {
+      if (transaction_status === 'capture' || 'settlement') {
         try {
           const getDetail = await prisma.donate.findMany({
             where: {

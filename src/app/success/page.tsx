@@ -76,94 +76,100 @@ const NotFoundPage = () => {
   return (
     <Layout>
       <div className="flex max-w-full flex-col items-center justify-center text-center">
-        <div className="relative w-52 max-w-full sm:w-[300px] xl:w-[350px] 3xl:w-[350px]">
-          {isMounted && !isDarkMode && (
-            <Lottie
-              animationData={Blockchain}
-              className="flex items-center justify-center"
-              loop={true}
-            />
-          )}
-          {isMounted && isDarkMode && (
-            <Lottie
-              animationData={BlockchainWhite}
-              className="flex items-center justify-center"
-              loop={true}
-            />
-          )}
-        </div>
+        {data[0].Status === 'paid' ? (
+          <>
+            <div className="relative w-52 max-w-full sm:w-[300px] xl:w-[350px] 3xl:w-[350px]">
+              {isMounted && !isDarkMode && (
+                <Lottie
+                  animationData={Blockchain}
+                  className="flex items-center justify-center"
+                  loop={true}
+                />
+              )}
+              {isMounted && isDarkMode && (
+                <Lottie
+                  animationData={BlockchainWhite}
+                  className="flex items-center justify-center"
+                  loop={true}
+                />
+              )}
+            </div>
 
-        <h2 className="mb-2 mt-5 text-base font-medium uppercase tracking-wide text-gray-900 dark:text-white sm:mb-4 sm:mt-10 sm:text-xl 3xl:mt-12 3xl:text-2xl">
-          Terima kasih ❤️
-        </h2>
-        <p className="mb-4 max-w-full text-xs leading-loose tracking-tight text-gray-600 dark:text-gray-400 sm:mb-6 sm:w-[430px] sm:text-sm sm:leading-loose">
-          Donasi anda telah tercatat di Solana Blockchain
-        </p>
+            <h2 className="mb-2 mt-5 text-base font-medium uppercase tracking-wide text-gray-900 dark:text-white sm:mb-4 sm:mt-10 sm:text-xl 3xl:mt-12 3xl:text-2xl">
+              Terima kasih ❤️
+            </h2>
+            <p className="mb-4 max-w-full text-xs leading-loose tracking-tight text-gray-600 dark:text-gray-400 sm:mb-6 sm:w-[430px] sm:text-sm sm:leading-loose">
+              Donasi anda telah tercatat di Solana Blockchain
+            </p>
 
-        <div className="grid grid-cols-3 justify-start gap-4 border-y border-dashed border-gray-200 py-5 text-left  dark:border-gray-700 ">
-          <div className="...">
-            <div className="font-bold	tracking-tighter text-gray-900 dark:text-white">
-              ID Transaksi
-            </div>
-            <div className="font-bold	tracking-tighter text-gray-900 dark:text-white">
-              Campaign
-            </div>
-            <div className="font-bold	tracking-tighter text-gray-900 dark:text-white">
-              Donatur
-            </div>
-            <div className="font-bold	tracking-tighter text-gray-900 dark:text-white">
-              Jumlah
-            </div>
-            <div className="font-bold	tracking-tighter text-gray-900 dark:text-white">
-              Metode
-            </div>
-            <div className="font-bold	tracking-tighter text-gray-900 dark:text-white">
-              Pesan
-            </div>
-            <div className="font-bold	tracking-tighter text-gray-900 dark:text-white">
-              Waktu
-            </div>
-          </div>
-          <div className="col-span-2">
-            <div className="truncate">
-              <a
-                href={
-                  `https://solscan.io/tx/` +
-                  data[0].tx_solana +
-                  `?cluster=devnet`
-                }
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex font-medium text-gray-900 hover:underline hover:opacity-90 focus:underline focus:opacity-90 dark:text-gray-100"
-              >
-                {data[0].tx_solana.substring(0, 40)}...&nbsp;
-                <ExportIcon className="h-auto w-3" />
-              </a>
-            </div>
-            <div className="truncate">{data[0].campaign[0].Title}</div>
+            <div className="grid grid-cols-3 justify-start gap-4 border-y border-dashed border-gray-200 py-5 text-left  dark:border-gray-700 ">
+              <div className="...">
+                <div className="font-bold	tracking-tighter text-gray-900 dark:text-white">
+                  ID Transaksi
+                </div>
+                <div className="font-bold	tracking-tighter text-gray-900 dark:text-white">
+                  Campaign
+                </div>
+                <div className="font-bold	tracking-tighter text-gray-900 dark:text-white">
+                  Donatur
+                </div>
+                <div className="font-bold	tracking-tighter text-gray-900 dark:text-white">
+                  Jumlah
+                </div>
+                <div className="font-bold	tracking-tighter text-gray-900 dark:text-white">
+                  Metode
+                </div>
+                <div className="font-bold	tracking-tighter text-gray-900 dark:text-white">
+                  Pesan
+                </div>
+                <div className="font-bold	tracking-tighter text-gray-900 dark:text-white">
+                  Waktu
+                </div>
+              </div>
+              <div className="col-span-2">
+                <div className="truncate">
+                  <a
+                    href={
+                      `https://solscan.io/tx/` +
+                      data[0].tx_solana +
+                      `?cluster=devnet`
+                    }
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex font-medium text-gray-900 hover:underline hover:opacity-90 focus:underline focus:opacity-90 dark:text-gray-100"
+                  >
+                    {data[0].tx_solana.substring(0, 40)}...&nbsp;
+                    <ExportIcon className="h-auto w-3" />
+                  </a>
+                </div>
+                <div className="truncate">{data[0].campaign[0].Title}</div>
 
-            <div>{data[0].Name}</div>
-            <div>
-              Rp.{' '}
-              {String(data[0].Amount)
-                .replace(/\D/g, '')
-                .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                <div>{data[0].Name}</div>
+                <div>
+                  Rp.{' '}
+                  {String(data[0].Amount)
+                    .replace(/\D/g, '')
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                </div>
+                <div>{data[0].payment_method}</div>
+                <div>{data[0].Message}</div>
+                <div>{formatDate(data[0].Donation_date)}</div>
+              </div>
             </div>
-            <div>{data[0].payment_method}</div>
-            <div>{data[0].Message}</div>
-            <div>{formatDate(data[0].Donation_date)}</div>
-          </div>
-        </div>
 
-        <AnchorLink
-          className="mt-6"
-          href={{
-            pathname:
-              layout === LAYOUT_OPTIONS.MODERN ? '/' : routes.home + layout,
-          }}
-        >
-          <Button shape="rounded">Back to Home</Button>
-        </AnchorLink>
+            <AnchorLink
+              className="mt-6"
+              href={{
+                pathname:
+                  layout === LAYOUT_OPTIONS.MODERN ? '/' : routes.home + layout,
+              }}
+            >
+              <Button shape="rounded">Back to Home</Button>
+            </AnchorLink>
+          </>
+        ) : (
+          'Pembayaran belum selesai'
+        )}
       </div>
     </Layout>
   );
