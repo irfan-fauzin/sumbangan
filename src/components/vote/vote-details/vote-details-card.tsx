@@ -16,8 +16,9 @@ import { fadeInBottom } from '@/lib/framer-motion/fade-in-bottom';
 import { useLayout } from '@/lib/hooks/use-layout';
 import { LAYOUT_OPTIONS } from '@/lib/constants';
 import Image from 'next/image';
-
+import { useRouter } from 'next/navigation';
 export default function VoteDetailsCard({ vote }: any) {
+  const router = useRouter();
   const [isExpand, setIsExpand] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { layout } = useLayout();
@@ -76,8 +77,8 @@ export default function VoteDetailsCard({ vote }: any) {
     // Get the response data from server as JSON.
     // If server returns the name submitted, that means the form works.
     const result = await response.json();
-
-    window.open(result.message);
+    await router.push('/success/?order_id=' + data.order_id);
+    await window.open(result.message);
     setIsLoading(false);
   }
 

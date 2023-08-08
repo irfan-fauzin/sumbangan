@@ -71,16 +71,6 @@ export default async function Usehandle(
           const date = dateISO;
           const paymentMethod = payment_type;
 
-          console.log(
-            campaign,
-            donatur,
-            amount,
-            midtransPaymentId,
-            notes,
-            date,
-            paymentMethod
-          );
-
           const donateAccount = web3.Keypair.generate();
           const tx = await program.methods
             .donate(
@@ -99,6 +89,8 @@ export default async function Usehandle(
             })
             .signers([donateAccount])
             .rpc();
+
+          console.log(tx);
 
           const result = await prisma.donate.updateMany({
             where: {

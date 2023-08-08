@@ -23,8 +23,12 @@ import Lottie from 'lottie-react';
 
 import Blockchain from '@/assets/images/sumbangan-chain.json';
 import BlockchainWhite from '@/assets/images/sumbangan-chain-white.json';
+
+import loader from '@/assets/images/loader.json';
+
 import useSWR from 'swr';
 import moment from 'moment-timezone';
+import { Loader } from '@solana/web3.js';
 
 const Layout = ({ children }: React.PropsWithChildren) => {
   const { layout } = useLayout();
@@ -76,7 +80,7 @@ const NotFoundPage = () => {
   return (
     <Layout>
       <div className="flex max-w-full flex-col items-center justify-center text-center">
-        {data[0].Status === 'paid' ? (
+        {data[0].status === 'paid' ? (
           <>
             <div className="relative w-52 max-w-full sm:w-[300px] xl:w-[350px] 3xl:w-[350px]">
               {isMounted && !isDarkMode && (
@@ -99,7 +103,7 @@ const NotFoundPage = () => {
               Terima kasih ❤️
             </h2>
             <p className="mb-4 max-w-full text-xs leading-loose tracking-tight text-gray-600 dark:text-gray-400 sm:mb-6 sm:w-[430px] sm:text-sm sm:leading-loose">
-              Donasi anda telah tercatat di Solana Blockchain
+              Donasi anda telah tercatat di Blockchain Solana
             </p>
 
             <div className="grid grid-cols-3 justify-start gap-4 border-y border-dashed border-gray-200 py-5 text-left  dark:border-gray-700 ">
@@ -152,7 +156,13 @@ const NotFoundPage = () => {
                     .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
                 </div>
                 <div>{data[0].payment_method}</div>
-                <div>{data[0].Message}</div>
+                <div>
+                  {data[0].Message === null ? (
+                    <span>&#8203;</span>
+                  ) : (
+                    data[0].Message
+                  )}
+                </div>
                 <div>{formatDate(data[0].Donation_date)}</div>
               </div>
             </div>
@@ -168,7 +178,85 @@ const NotFoundPage = () => {
             </AnchorLink>
           </>
         ) : (
-          'Pembayaran belum selesai'
+          <>
+            <div className="relative w-52 max-w-full sm:w-[300px] xl:w-[350px] 3xl:w-[350px]">
+              <Lottie
+                animationData={loader}
+                className="flex items-center justify-center"
+                loop={true}
+              />
+            </div>
+
+            <h2 className="mb-2 mt-5 text-base font-medium uppercase tracking-wide text-gray-900 dark:text-white sm:mb-4 sm:mt-10 sm:text-xl 3xl:mt-12 3xl:text-2xl">
+              Menunggu pembayaran
+            </h2>
+            <p className="mb-4 max-w-full text-xs leading-loose tracking-tight text-gray-600 dark:text-gray-400 sm:mb-6 sm:w-[430px] sm:text-sm sm:leading-loose">
+              Donasi anda nantinya akan dicatat didalam Blockchain Solana
+            </p>
+
+            <div className="grid grid-cols-3 justify-start gap-4 border-y border-dashed border-gray-200 py-5 text-left  dark:border-gray-700 ">
+              <div className="...">
+                <div className="font-bold	tracking-tighter text-gray-900 dark:text-white">
+                  ID Transaksi
+                </div>
+                <div className="font-bold	tracking-tighter text-gray-900 dark:text-white">
+                  Campaign
+                </div>
+                <div className="font-bold	tracking-tighter text-gray-900 dark:text-white">
+                  Donatur
+                </div>
+                <div className="font-bold	tracking-tighter text-gray-900 dark:text-white">
+                  Jumlah
+                </div>
+                <div className="font-bold	tracking-tighter text-gray-900 dark:text-white">
+                  Metode
+                </div>
+                <div className="font-bold	tracking-tighter text-gray-900 dark:text-white">
+                  Pesan
+                </div>
+                <div className="font-bold	tracking-tighter text-gray-900 dark:text-white">
+                  Waktu
+                </div>
+              </div>
+              <div className="col-span-2">
+                <div className="truncate">
+                  <span>&#8203;</span>
+                </div>
+                <div className="truncate">{data[0].campaign[0].Title}</div>
+
+                <div>{data[0].Name}</div>
+                <div>
+                  Rp.{' '}
+                  {String(data[0].Amount)
+                    .replace(/\D/g, '')
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                </div>
+                <div>
+                  <span>&#8203;</span>
+                </div>
+                <div>
+                  {data[0].Message === null ? (
+                    <span>&#8203;</span>
+                  ) : (
+                    data[0].Message
+                  )}
+                </div>
+                <div>
+                  <span>&#8203;</span>
+                </div>
+              </div>
+            </div>
+
+            <AnchorLink
+              className="mt-6"
+              href={{
+                pathname:
+                  layout === LAYOUT_OPTIONS.MODERN ? '/' : routes.home + layout,
+              }}
+            >
+              <Button shape="rounded">Back to Home</Button>
+            </AnchorLink>
+          </>
         )}
       </div>
     </Layout>
