@@ -1,5 +1,7 @@
 'use client';
 
+import { useSearchParams } from 'next/navigation';
+import './loader.css';
 import { mutate } from 'swr';
 import React from 'react';
 import Image from '@/components/ui/image';
@@ -21,6 +23,8 @@ import Lottie from 'lottie-react';
 
 import Blockchain from '@/assets/images/sumbangan-chain.json';
 import BlockchainWhite from '@/assets/images/sumbangan-chain-white.json';
+import useSWR from 'swr';
+import moment from 'moment-timezone';
 
 const Layout = ({ children }: React.PropsWithChildren) => {
   const { layout } = useLayout();
@@ -38,9 +42,37 @@ const Layout = ({ children }: React.PropsWithChildren) => {
 
 const NotFoundPage = () => {
   mutate('/api/campaign');
+  const searchParams = useSearchParams();
+  const search = searchParams?.get('order_id');
   const { layout } = useLayout();
   const isMounted = useIsMounted();
   const { isDarkMode } = useIsDarkMode();
+
+  const url = `/api/campaign/donate/?order_id=${search}`;
+  const fetcher = (...args) => fetch(...args).then((res) => res.json());
+  const { data, error, isLoading } = useSWR(url, fetcher);
+
+  if (error)
+    return <div>Koneksi internet bermasalah atau Server sedang gangguan</div>;
+
+  if (isLoading)
+    return (
+      <>
+        <div className="flex justify-center pt-10">
+          <span className=" loader"></span>
+        </div>
+      </>
+    );
+
+  function formatDate(string) {
+    return moment(string).locale('id').subtract(7, 'hours').format('LLL');
+
+    // var m = moment(string).locale("id")
+    // var str = moment(m).format('DD-MM-YYYY HH:mm:ss ZZ');
+
+    // return moment.tz(str, 'Asia/Jakarta').subtract(1,"days").add(2,"hours").add(1, "months").format('LLL');
+  }
+
   return (
     <Layout>
       <div className="flex max-w-full flex-col items-center justify-center text-center">
@@ -83,29 +115,43 @@ const NotFoundPage = () => {
               Jumlah
             </div>
             <div className="font-bold	tracking-tighter text-gray-900 dark:text-white">
+              Metode
+            </div>
+            <div className="font-bold	tracking-tighter text-gray-900 dark:text-white">
               Pesan
             </div>
             <div className="font-bold	tracking-tighter text-gray-900 dark:text-white">
               Waktu
             </div>
           </div>
-          <div className="... col-span-2">
+          <div className="col-span-2">
             <div className="truncate">
               <a
-                href="https://solscan.io/tx/2S95Qv6E3JBeX6nXgoaVuMaLtySAzLg15PxxUAqyX692aA2cH4quQb9hrZp3o6FmJZ43XBEuhGXKaWZ7KC3pDuqF"
+                href={
+                  `https://solscan.io/tx/` +
+                  data[0].tx_solana +
+                  `?cluster=devnet`
+                }
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex font-medium text-gray-900 hover:underline hover:opacity-90 focus:underline focus:opacity-90 dark:text-gray-100"
               >
-                2S95Qv6E3JBeX6nXgoaVuMaLtySAzLg15PxxUAqyX692aA2cH4quQb9h....
+                {data[0].tx_solana.substring(0, 40)}...&nbsp;
                 <ExportIcon className="h-auto w-3" />
               </a>
             </div>
-            <div className="truncate">
-              Berbagi Kasih dengan Sedekah Makan untuk Yatim dhuafa
+            <div className="truncate">{data[0].campaign[0].Title}</div>
+
+            <div>{data[0].Name}</div>
+            <div>
+              Rp.{' '}
+              {String(data[0].Amount)
+                .replace(/\D/g, '')
+                .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
             </div>
-            <div>09</div>
-            <div>09</div>
-            <div>09</div>
-            <div>09</div>
+            <div>{data[0].payment_method}</div>
+            <div>{data[0].Message}</div>
+            <div>{formatDate(data[0].Donation_date)}</div>
           </div>
         </div>
 

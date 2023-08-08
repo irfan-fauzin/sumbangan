@@ -1,9 +1,7 @@
 // @ts-nocheck
 
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { Prisma, PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import prisma from '@/lib/prisma';
 
 export default async function Usehandle(
   req: NextApiRequest,

@@ -1,6 +1,5 @@
 'use client';
 
-
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { A11y, Pagination, Autoplay } from 'swiper';
 import { useBreakpoint } from '@/lib/hooks/use-breakpoint';
@@ -12,8 +11,6 @@ const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
 export default function LivePricingSlider({ limits }: { limits: number }) {
   const { data } = useSWR('/api/campaign/donate', fetcher);
-
-
 
   const breakpoint = useBreakpoint();
 
@@ -57,7 +54,7 @@ export default function LivePricingSlider({ limits }: { limits: number }) {
         pagination={{ clickable: true }}
         observer={true}
         dir="ltr"
-        className="w-full pb-10"
+        className="mb-6 w-full pb-10"
         autoplay={{
           delay: 2500,
           disableOnInteraction: false,
@@ -67,12 +64,16 @@ export default function LivePricingSlider({ limits }: { limits: number }) {
           <SwiperSlide key={item.id}>
             <div
               className={cn(
-                'mb-6 flex items-center gap-4 rounded-lg bg-white p-5 shadow-[0_8px_16px_rgba(17,24,39,0.05)] dark:bg-light-dark lg:flex-row'
+                ' flex items-center gap-4 rounded-lg bg-white p-5 shadow-[0_8px_16px_rgba(17,24,39,0.05)] dark:bg-light-dark lg:flex-row'
               )}
             >
               <div className="w-full flex-col">
                 <Link
-                  href={'https://test.com'}
+                  href={
+                    `https://solscan.io/tx/` +
+                    item?.tx_solana +
+                    `?cluster=devnet`
+                  }
                   rel="noopener noreferrer"
                   target="_blank"
                 >

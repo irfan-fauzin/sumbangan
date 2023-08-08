@@ -74,7 +74,13 @@ const COLUMNS = [
     Cell: ({ cell: { value } }) => (
       <div className="flex items-center justify-start">
         <LinkIcon className="h-[18px] w-[18px] ltr:mr-2 rtl:ml-2" />{' '}
-        <a href={`https://solscan.io/tx/` + value}>Link</a>
+        <a
+          href={`https://solscan.io/tx/` + value + `?cluster=devnet`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Link
+        </a>
       </div>
     ),
     minWidth: 200,

@@ -1,7 +1,6 @@
 // @ts-nocheck
 
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { Prisma, PrismaClient } from '@prisma/client';
 
 import * as web3 from '@solana/web3.js';
 import * as anchor from '@project-serum/anchor';
@@ -11,7 +10,7 @@ import idl from '@/assets/idl.json';
 import { mutate } from 'swr';
 import { parseJSON } from 'date-fns/esm';
 
-const prisma = new PrismaClient();
+import prisma from '@/lib/prisma';
 
 const a = JSON.stringify(idl);
 const parsedidl = JSON.parse(a);

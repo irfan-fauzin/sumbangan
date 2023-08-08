@@ -42,13 +42,25 @@ const COLUMNS = [
     accessor: 'Message',
     // @ts-ignore
     Cell: ({ cell: { value } }) => (
-      <div
-        className={cn(
-          'text-[13px] sm:text-inherit ltr:sm:text-right rtl:sm:text-left'
-        )}
+      <div className={cn('truncate text-[13px] sm:text-inherit')}>{value}</div>
+    ),
+  },
+  {
+    Header: 'Metode Pembayaran',
+    accessor: 'payment_method',
+  },
+  {
+    Header: 'Transaksi Solana',
+    accessor: 'tx_solana',
+    // @ts-ignore
+    Cell: ({ cell: { value } }) => (
+      <a
+        href={`https://solscan.io/tx/` + value + `?cluster=devnet`}
+        className="inline-flex items-center gap-2 hover:underline hover:opacity-90 focus:underline focus:opacity-90"
       >
-        {value}
-      </div>
+        LINK
+        <ExportIcon className="h-auto w-3" />
+      </a>
     ),
   },
 ];

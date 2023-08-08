@@ -16,7 +16,7 @@ import TopupButton from '@/components/ui/topup-button';
 import AuthorImage from '@/assets/images/rupiah.png';
 
 import useSWR from 'swr';
-
+import '@/assets/css/loader.css';
 export default function ModernScreen() {
   const fetcher = (...args) => fetch(...args).then((res) => res.json());
   const {
@@ -35,7 +35,7 @@ export default function ModernScreen() {
     return (
       <>
         <div className="flex justify-center pt-10">
-          <span className=" loader"></span>
+          <span className="loader"></span>
         </div>
       </>
     );

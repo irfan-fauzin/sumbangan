@@ -1,25 +1,35 @@
 // @ts-nocheck
 
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { Prisma, PrismaClient } from '@prisma/client';
+
 import { campaignMenuItems } from '@/layouts/sidebar/_menu-items';
 import { title } from 'process';
 
-const prisma = new PrismaClient();
+import prisma from '@/lib/prisma';
 
 export default async function Usehandle(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const query = req.query;
-
   switch (req.method) {
     case 'GET': {
+      if (req.query.order_id) {
+        const getDetail = await prisma.donate.findMany({
+          where: {
+            tx_midtrans: req.query.order_id,
+          },
+          include: {
+            campaign: true,
+          },
+        });
+        return res.json(getDetail);
+      }
+
       const result = await prisma.donate.findMany({
         take: 25,
         orderBy: {
-            Donation_date: 'desc',
-          },
+          Donation_date: 'desc',
+        },
         include: {
           campaign: {
             select: {
