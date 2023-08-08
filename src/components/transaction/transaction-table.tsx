@@ -26,14 +26,26 @@ function formatDate(string) {
 
 const COLUMNS = [
   {
+    Header: () => <div className="ltr:mr-auto rtl:ml-auto">Campaign</div>,
+    accessor: 'campaign[0]',
+    // @ts-ignore
+    Cell: ({ cell: { value } }) => (
+      <div className=" truncate ltr:text-left rtl:text-right">
+        {value.Title}
+      </div>
+    ),
+    minWidth: 200,
+    maxWidth: 200,
+  },
+  {
     Header: () => <div className="ltr:mr-auto rtl:ml-auto">Donatur</div>,
     accessor: 'Name',
     // @ts-ignore
     Cell: ({ cell: { value } }) => (
       <div className="ltr:text-left rtl:text-right">{value}</div>
     ),
-    minWidth: 200,
-    maxWidth: 200,
+    minWidth: 190,
+    maxWidth: 190,
   },
 
   {

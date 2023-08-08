@@ -5,6 +5,7 @@ import cn from 'classnames';
 import ButtonDrip from '@/components/ui/button/button-drip';
 import ButtonLoader from '@/components/ui/button/button-loader';
 import { LoaderSizeTypes, LoaderVariantTypes } from '@/components/ui/loader';
+
 type ShapeNames = 'rounded' | 'pill' | 'circle';
 type VariantNames = 'ghost' | 'solid' | 'transparent';
 type ColorNames =
@@ -129,14 +130,14 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           'relative inline-flex shrink-0 items-center justify-center overflow-hidden text-center text-xs font-medium tracking-wider outline-none transition-all sm:text-sm',
           !disabled
             ? buttonColorClassNames
-            : 'dark:text-dark-400 cursor-not-allowed  text-gray-400',
+            : ' text-white-300  cursor-not-allowed bg-slate-400',
           disabled || isLoading || variant === 'transparent'
             ? ''
             : 'hover:-translate-y-0.5 hover:shadow-large focus:-translate-y-0.5 focus:shadow-large focus:outline-none',
           isLoading && 'pointer-events-auto cursor-default focus:outline-none',
           fullWidth && 'w-full',
           color === 'white' || color === 'gray'
-            ? 'text-white-300 dark:text-dark-400'
+            ? 'text-white-300 bg-slate-400'
             : variants[variant],
           shapes[shape],
           shape === 'circle' ? `${sizeClassNames[1]}` : `${sizeClassNames[0]}`,

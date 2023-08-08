@@ -17,6 +17,10 @@ import { useLayout } from '@/lib/hooks/use-layout';
 import { LAYOUT_OPTIONS } from '@/lib/constants';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
+
 export default function VoteDetailsCard({ vote }: any) {
   const router = useRouter();
   const [isExpand, setIsExpand] = useState(false);
@@ -209,7 +213,17 @@ export default function VoteDetailsCard({ vote }: any) {
                           disabled={isLoading}
                           className="h-12 w-full hover:bg-green-500"
                         >
-                          {isLoading ? 'Tunggu Sebentar' : 'Donasi'}
+                          {isLoading ? (
+                            <>
+                              <FontAwesomeIcon
+                                className="fa-spin"
+                                icon={faCircleNotch}
+                              />{' '}
+                              Tunggu Sebentar
+                            </>
+                          ) : (
+                            'Donasi'
+                          )}
                         </Button>
                       </div>
                     </div>

@@ -28,7 +28,6 @@ import loader from '@/assets/images/loader.json';
 
 import useSWR from 'swr';
 import moment from 'moment-timezone';
-import { Loader } from '@solana/web3.js';
 
 const Layout = ({ children }: React.PropsWithChildren) => {
   const { layout } = useLayout();
@@ -80,7 +79,9 @@ const NotFoundPage = () => {
   return (
     <Layout>
       <div className="flex max-w-full flex-col items-center justify-center text-center">
-        {data[0].status === 'paid' ? (
+        {data.length === 0 ? (
+          'Order ID tidak valid'
+        ) : data[0].status === 'paid' ? (
           <>
             <div className="relative w-52 max-w-full sm:w-[300px] xl:w-[350px] 3xl:w-[350px]">
               {isMounted && !isDarkMode && (

@@ -8,20 +8,15 @@ import * as anchor from '@project-serum/anchor';
 import idl from '@/assets/idl.json';
 
 import { mutate } from 'swr';
-import { parseJSON } from 'date-fns/esm';
 
 import prisma from '@/lib/prisma';
 
 const a = JSON.stringify(idl);
 const parsedidl = JSON.parse(a);
 
-const secret = [
-  251, 17, 248, 25, 28, 204, 219, 142, 71, 100, 228, 255, 74, 95, 79, 115, 66,
-  44, 71, 114, 57, 48, 217, 180, 117, 201, 212, 83, 196, 28, 76, 192, 10, 184,
-  248, 69, 111, 232, 95, 165, 148, 14, 45, 225, 226, 152, 35, 122, 134, 197, 15,
-  160, 130, 102, 63, 95, 17, 130, 192, 52, 118, 75, 103, 34,
-];
-const myKeypair = web3.Keypair.fromSecretKey(new Uint8Array(secret));
+const myKeypair = web3.Keypair.fromSecretKey(
+  new Uint8Array(JSON.parse(process.env.keypair))
+);
 
 const connection = new web3.Connection(web3.clusterApiUrl('devnet'));
 

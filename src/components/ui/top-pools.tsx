@@ -16,8 +16,6 @@ export default function TopPools({ limit }: TopPoolsProps) {
   const { data: irfan } = useSWR('/api/test?username=irfan', fetcher);
   const { data: guntur } = useSWR('/api/test?username=guntur', fetcher);
 
-  console.log(irfan);
-
   const { layout } = useLayout();
   return (
     <div
