@@ -70,7 +70,7 @@ export default function LivePricingSlider({ limits }: { limits: number }) {
               <div className="w-full flex-col">
                 <Link
                   href={
-                    `https://solscan.io/tx/` +
+                    `https://explorer.solana.com/tx/` +
                     item?.tx_solana +
                     `?cluster=devnet`
                   }

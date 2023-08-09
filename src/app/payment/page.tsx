@@ -135,9 +135,9 @@ const NotFoundPage = () => {
                 <div className="truncate">
                   <a
                     href={
-                      `https://solscan.io/tx/` +
+                      `https://explorer.solana.com/tx/` +
                       data[0].tx_solana +
-                      `?cluster=devnet`
+                      `/?cluster=devnet`
                     }
                     target="_blank"
                     rel="noopener noreferrer"

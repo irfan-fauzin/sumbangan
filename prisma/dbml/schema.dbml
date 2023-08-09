@@ -1,0 +1,59 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table User {
+  id Int [pk, increment]
+  username String [unique]
+  password String
+  fullname String
+  role Role [not null, default: 'CAMPAIGN_MANAGER']
+  createdAt DateTime [default: `now()`, not null]
+  verified Boolean [not null, default: false]
+  campaign Campaign [not null]
+}
+
+Table Campaign {
+  id Int [pk, increment]
+  Title String [unique]
+  Image String
+  Description String [not null]
+  Target Int [not null]
+  Status Status [not null, default: 'active']
+  Date_created DateTime [default: `now()`, not null]
+  Date_end String
+  donate Donate [not null]
+  created_by Int
+  user User
+}
+
+Table Donate {
+  id_donate Int [pk, increment]
+  campaign Campaign [not null]
+  Amount Int
+  Message String
+  Name String
+  tx_solana String
+  tx_midtrans String
+  Donation_date DateTime
+  status Status_Payment [not null, default: 'unpaid']
+  email String
+  payment_method String
+}
+
+Enum Role {
+  ADMIN
+  CAMPAIGN_MANAGER
+}
+
+Enum Status {
+  active
+  past
+}
+
+Enum Status_Payment {
+  paid
+  unpaid
+}
+
+Ref: Campaign.created_by > User.id
