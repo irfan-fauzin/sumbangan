@@ -50,7 +50,9 @@ const COLUMNS = [
     // @ts-ignore
     Cell: ({ cell: { value } }) => (
       <a
-        href={`https://solscan.io/tx/` + value + `?cluster=devnet`}
+        href={`https://explorer.solana.com/tx/` + value + `?cluster=devnet`}
+        rel="noopener noreferrer"
+        target="_blank"
         className="inline-flex items-center gap-2 hover:underline hover:opacity-90 focus:underline focus:opacity-90"
       >
         LINK
