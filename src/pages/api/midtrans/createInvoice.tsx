@@ -59,17 +59,6 @@ export default async function Usehandle(
           const test = transaction.transaction_id;
           return res.status(201).json({ message: url });
         });
-
-        // const result = await prisma.donate.create({
-        //   data: {
-        //     id_donate: { connect: { id: id } },
-        //     Amount: nama_mesin,
-        //     Mesage: nomer_seri,
-        //     Name: kategori,
-
-        //   },
-        // })
-        // return res.status(201).json(result)
       } catch (e) {
         throw e;
       }

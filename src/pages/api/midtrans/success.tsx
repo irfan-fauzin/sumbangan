@@ -21,7 +21,7 @@ const myKeypair = web3.Keypair.fromSecretKey(
 const connection = new web3.Connection(web3.clusterApiUrl('devnet'));
 
 const programId = new web3.PublicKey(
-  '5oHv28d6bup84dHF4ARf7ZzsbdLhcJmg8iPGzhcnQayM'
+  'DxFqiZrrtGpGTpWod54Gop9fZvEu95zBBf32kWTvLjdu'
 );
 
 const wallet = new anchor.Wallet(myKeypair);
@@ -68,7 +68,7 @@ export default async function Usehandle(
 
           const donateAccount = web3.Keypair.generate();
           const tx = await program.methods
-            .donate(
+            .create(
               campaign,
               donatur,
               amount,
@@ -99,6 +99,7 @@ export default async function Usehandle(
               Donation_date: dateISO,
               payment_method: payment_type,
               tx_solana: tx,
+              id_account: donateAccount.publicKey.toBase58(),
             },
           });
 

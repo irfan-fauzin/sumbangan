@@ -3,30 +3,51 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '@/lib/prisma';
 
+import * as web3 from '@solana/web3.js';
+import * as anchor from '@project-serum/anchor';
+
+import idl from '@/assets/idl.json';
+
+import { mutate } from 'swr';
+
+const a = JSON.stringify(idl);
+const parsedidl = JSON.parse(a);
+
+const myKeypair = web3.Keypair.fromSecretKey(
+  new Uint8Array(JSON.parse(process.env.keypair))
+);
+
+const connection = new web3.Connection(web3.clusterApiUrl('devnet'));
+
+const programId = new web3.PublicKey(
+  'DxFqiZrrtGpGTpWod54Gop9fZvEu95zBBf32kWTvLjdu'
+);
+
+const wallet = new anchor.Wallet(myKeypair);
+const provider = new anchor.AnchorProvider(
+  connection,
+  new anchor.Wallet(myKeypair),
+  {
+    commitment: 'processed',
+  }
+);
+
+const program = new anchor.Program(parsedidl, programId, provider);
+
 export default async function Usehandle(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const query = req.query;
-  const { username } = query;
   switch (req.method) {
     case 'GET': {
-      const test = await prisma.donate.aggregate({
-        where: {
-          status: 'paid',
-          campaign: {
-            every: {
-              user: { username: username },
-            },
-          },
-        },
+      const postAccounts = await program.account.donateAccount.all();
 
-        _sum: {
-          Amount: true,
-        },
-      });
-
-      return res.json(test);
+      return res.json(postAccounts);
     }
+
+    default:
+      throw new Error(
+        `The HTTP ${req.method} method is not supported at this route.`
+      );
   }
 }

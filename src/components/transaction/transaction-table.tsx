@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   useTable,
   useResizeColumns,
@@ -14,24 +14,45 @@ import { LongArrowLeft } from '@/components/icons/long-arrow-left';
 import { LinkIcon } from '@/components/icons/link-icon';
 import useSWR from 'swr';
 import moment from 'moment-timezone';
+import * as web3 from '@solana/web3.js';
+import { Wallet, Program, AnchorProvider } from '@project-serum/anchor';
+import idl from '@/assets/idl.json';
+
+const programId = new web3.PublicKey(
+  'DxFqiZrrtGpGTpWod54Gop9fZvEu95zBBf32kWTvLjdu'
+);
+const connection = new web3.Connection(web3.clusterApiUrl('devnet'));
+const a = JSON.stringify(idl);
+const parsedidl = JSON.parse(a);
+
+const secret = [
+  251, 17, 248, 25, 28, 204, 219, 142, 71, 100, 228, 255, 74, 95, 79, 115, 66,
+  44, 71, 114, 57, 48, 217, 180, 117, 201, 212, 83, 196, 28, 76, 192, 10, 184,
+  248, 69, 111, 232, 95, 165, 148, 14, 45, 225, 226, 152, 35, 122, 134, 197, 15,
+  160, 130, 102, 63, 95, 17, 130, 192, 52, 118, 75, 103, 34,
+];
+// Replace with your secret key
+const from = web3.Keypair.fromSecretKey(new Uint8Array(secret));
+
+const provider = new AnchorProvider(connection, {
+  commitment: 'processed',
+});
+
+const program = new Program(parsedidl, programId, provider);
 
 function formatDate(string) {
-  return moment(string).locale('id').subtract(7, 'hours').format('LLL');
-
-  // var m = moment(string).locale("id")
-  // var str = moment(m).format('DD-MM-YYYY HH:mm:ss ZZ');
-
-  // return moment.tz(str, 'Asia/Jakarta').subtract(1,"days").add(2,"hours").add(1, "months").format('LLL');
+  return moment(string).locale('id').format('LLL');
 }
 
 const COLUMNS = [
   {
     Header: () => <div className="ltr:mr-auto rtl:ml-auto">Campaign</div>,
-    accessor: 'campaign[0]',
+    accessor: 'account',
+    id: 'campaign',
     // @ts-ignore
     Cell: ({ cell: { value } }) => (
       <div className=" truncate ltr:text-left rtl:text-right">
-        {value.Title}
+        {value.campaign}
       </div>
     ),
     minWidth: 200,
@@ -39,10 +60,11 @@ const COLUMNS = [
   },
   {
     Header: () => <div className="ltr:mr-auto rtl:ml-auto">Donatur</div>,
-    accessor: 'Name',
+    accessor: 'account',
+    id: 'donatur',
     // @ts-ignore
     Cell: ({ cell: { value } }) => (
-      <div className="ltr:text-left rtl:text-right">{value}</div>
+      <div className="ltr:text-left rtl:text-right">{value.donatur}</div>
     ),
     minWidth: 190,
     maxWidth: 190,
@@ -50,13 +72,14 @@ const COLUMNS = [
 
   {
     Header: () => <div className="ltr:mr-auto rtl:ml-auto">Amount</div>,
-    accessor: 'Amount',
+    accessor: 'account',
+    id: 'amount',
     // @ts-ignore
     Cell: ({ cell: { value } }) => (
       <div className="-tracking-[1px] ltr:text-right rtl:text-left">
         <strong className="mb-0.5 flex justify-start  md:mb-1.5  ">
           Rp.{' '}
-          {String(value)
+          {String(value.amount)
             .replace(/\D/g, '')
             .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
           <span className="inline-block ltr:ml-1.5 rtl:mr-1.5 md:ltr:ml-2 md:rtl:mr-2"></span>
@@ -69,10 +92,13 @@ const COLUMNS = [
 
   {
     Header: () => <div className="ltr:mr-auto rtl:ml-auto">Payment</div>,
-    accessor: 'payment_method',
+    accessor: 'account',
+    id: 'paymentMethod',
     // @ts-ignore
     Cell: ({ cell: { value } }) => (
-      <div className="flex items-center justify-start">{value}</div>
+      <div className="flex items-center justify-start">
+        {value.paymentMethod}
+      </div>
     ),
     minWidth: 100,
     maxWidth: 180,
@@ -81,13 +107,15 @@ const COLUMNS = [
     Header: () => (
       <div className="ltr:mr-auto rtl:mr-auto">Solana Transaction</div>
     ),
-    accessor: 'tx_solana',
+    accessor: 'publicKey',
     // @ts-ignore
     Cell: ({ cell: { value } }) => (
       <div className="flex items-center justify-start">
         <LinkIcon className="h-[18px] w-[18px] ltr:mr-2 rtl:ml-2" />{' '}
         <a
-          href={`https://explorer.solana.com/tx/` + value + `?cluster=devnet`}
+          href={
+            `https://explorer.solana.com/address/` + value + `?cluster=devnet`
+          }
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -101,10 +129,12 @@ const COLUMNS = [
 
   {
     Header: () => <div className="ltr:mr-auto rtl:ml-auto">Date</div>,
-    accessor: 'Donation_date',
+    accessor: 'account',
     // @ts-ignore
     Cell: ({ cell: { value } }) => (
-      <div className="flex items-center justify-start">{formatDate(value)}</div>
+      <div className="flex items-center justify-start">
+        {formatDate(value.date)}
+      </div>
     ),
     minWidth: 250,
     maxWidth: 250,
@@ -112,11 +142,27 @@ const COLUMNS = [
 ];
 
 export default function TransactionTable() {
-  const fetcher = (...args) => fetch(...args).then((res) => res.json());
-  const { data, error, isLoading } = useSWR('/api/campaign/donate', fetcher);
+  // const fetcher = (...args) => fetch(...args).then((res) => res.json());
+  // const { data, error, isLoading } = useSWR('/api/test', fetcher);
 
-  if (error) return <div>Failed to fetch users.</div>;
-  if (isLoading) return <h2>Loading...</h2>;
+  // if (error) return <div>Failed to fetch users.</div>;
+  // if (isLoading) return <h2>Loading...</h2>;
+
+  const [data, setColor] = useState([]);
+
+  data.sort((a, b) => (a.account.date < b.account.date ? -1 : 1));
+
+  useEffect(() => {
+    let mounted = true;
+    program.account.donateAccount.all().then((items) => {
+      if (mounted) {
+        console.log(items.forEach((person) => console.log(person.publicKey)));
+
+        setColor(items);
+      }
+    });
+    return () => (mounted = false);
+  }, []);
 
   const columns = COLUMNS;
 

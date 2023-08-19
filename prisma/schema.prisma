@@ -1,15 +1,6 @@
 generator client {
   provider = "prisma-client-js"
-  
 }
-
-// datasource db {
-//   provider          = "postgresql"
-//   url               = env("POSTGRES_PRISMA_URL")
-//   directUrl         = env("POSTGRES_URL_NON_POOLING")
-//   shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING")
-// }
-
 datasource db {
   provider = "mysql"
   url = env("DATABASE_URL")
@@ -19,7 +10,6 @@ datasource db {
 generator dbml {
   provider = "prisma-dbml-generator"
 }
-
 model User {
   id               Int        @id @default(autoincrement())
   username         String?    @unique
@@ -30,7 +20,6 @@ model User {
   verified         Boolean    @default(false)
   campaign         Campaign[]
 }
-
 model Campaign {
   id           Int      @id @default(autoincrement())
   Title        String?  @unique
@@ -43,7 +32,6 @@ model Campaign {
   donate       Donate[]
   created_by   Int?
   user         User?     @relation(fields: [created_by], references: [id])
-
 }
 
 model Donate {
@@ -52,25 +40,23 @@ model Donate {
   Amount              Int?
   Message             String?
   Name                String?
+  id_account          String?
   tx_solana           String?
   tx_midtrans         String?
   Donation_date       DateTime?
   status              Status_Payment @default(unpaid)
   email               String?
   payment_method      String?
-
 }
 
 enum Role {
   ADMIN
   CAMPAIGN_MANAGER
 }
-
 enum Status {
   active
   past
 }
-
 enum Status_Payment {
   paid
   unpaid

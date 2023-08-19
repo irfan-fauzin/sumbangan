@@ -33,6 +33,7 @@ Table Donate {
   Amount Int
   Message String
   Name String
+  id_account String
   tx_solana String
   tx_midtrans String
   Donation_date DateTime

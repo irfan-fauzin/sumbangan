@@ -1,10 +1,6 @@
 // @ts-nocheck
 
 import type { NextApiRequest, NextApiResponse } from 'next';
-
-import { campaignMenuItems } from '@/layouts/sidebar/_menu-items';
-import { title } from 'process';
-
 import prisma from '@/lib/prisma';
 
 export default async function Usehandle(

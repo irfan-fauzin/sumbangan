@@ -10,7 +10,7 @@ import useSWR from 'swr';
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
 export default function LivePricingSlider({ limits }: { limits: number }) {
-  const { data } = useSWR('/api/campaign/donate', fetcher);
+  const { data } = useSWR('/api/test', fetcher);
 
   const breakpoint = useBreakpoint();
 
@@ -70,8 +70,8 @@ export default function LivePricingSlider({ limits }: { limits: number }) {
               <div className="w-full flex-col">
                 <Link
                   href={
-                    `https://explorer.solana.com/tx/` +
-                    item?.tx_solana +
+                    `https://explorer.solana.com/address/` +
+                    item.publicKey +
                     `?cluster=devnet`
                   }
                   rel="noopener noreferrer"
@@ -79,24 +79,24 @@ export default function LivePricingSlider({ limits }: { limits: number }) {
                 >
                   <div className="mb-3 flex items-center justify-between">
                     <h4 className="truncate text-sm font-medium text-gray-900  dark:text-white">
-                      {item?.Name}
+                      {item?.account?.campaign}
                     </h4>
 
                     <div className="truncate text-xs -tracking-wide text-gray-600 ltr:pl-2 rtl:pr-2 dark:text-gray-400 xs:text-sm ">
-                      {formatDate(item?.Donation_date)}
+                      {formatDate(item?.account?.date)}
                     </div>
                   </div>
 
                   <div className="mb-2 text-sm font-medium tracking-tighter text-gray-900 dark:text-white lg:text-lg 2xl:text-xl 3xl:text-2xl">
                     Rp.{' '}
-                    {String(item?.Amount)
+                    {String(item?.account?.amount)
                       .replace(/\D/g, '')
                       .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
                   </div>
 
                   <div className="flex items-center text-xs font-medium 2xl:text-sm">
                     <span className="truncate text-xs tracking-tighter text-gray-600 ltr:mr-5 rtl:ml-5 dark:text-gray-400 2xl:w-24 3xl:w-auto">
-                      {item['campaign'][0]['Title']}
+                      {item?.account?.campaign}
                     </span>
                   </div>
                 </Link>

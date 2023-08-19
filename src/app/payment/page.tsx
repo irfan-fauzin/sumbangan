@@ -18,6 +18,7 @@ import MinimalLayout from '@/layouts/minimal/layout';
 import RetroLayout from '@/layouts/retro/layout';
 import ClassicLayout from '@/layouts/classic/layout';
 import { ExportIcon } from '@/components/icons/export-icon';
+import TopupButton from '@/components/ui/topup-button';
 
 import Lottie from 'lottie-react';
 
@@ -68,12 +69,7 @@ const NotFoundPage = () => {
     );
 
   function formatDate(string) {
-    return moment(string).locale('id').subtract(7, 'hours').format('LLL');
-
-    // var m = moment(string).locale("id")
-    // var str = moment(m).format('DD-MM-YYYY HH:mm:ss ZZ');
-
-    // return moment.tz(str, 'Asia/Jakarta').subtract(1,"days").add(2,"hours").add(1, "months").format('LLL');
+    return moment(string).locale('id').format('LLL');
   }
 
   return (
@@ -103,9 +99,12 @@ const NotFoundPage = () => {
             <h2 className="mb-2 mt-5 text-base font-medium uppercase tracking-wide text-gray-900 dark:text-white sm:mb-4 sm:mt-10 sm:text-xl 3xl:mt-12 3xl:text-2xl">
               Terima kasih ❤️
             </h2>
-            <p className="mb-4 max-w-full text-xs leading-loose tracking-tight text-gray-600 dark:text-gray-400 sm:mb-6 sm:w-[430px] sm:text-sm sm:leading-loose">
-              Donasi anda telah tercatat di Blockchain Solana
+            <p className="mb-2 max-w-full text-xs leading-loose tracking-tight text-gray-600 dark:text-gray-400 sm:mb-6 sm:w-[430px] sm:text-sm sm:leading-loose">
+              Donasi anda telah tercatat di Blockchain Solana, Simpan ID ini
+              sebagai tanda bukti
             </p>
+
+            <TopupButton className="mb-3" value={data[0].id_account} />
 
             <div className="grid grid-cols-3 justify-start gap-4 border-y border-dashed border-gray-200 py-5 text-left  dark:border-gray-700 ">
               <div className="...">
